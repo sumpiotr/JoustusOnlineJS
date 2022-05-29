@@ -9,6 +9,7 @@ class Ui {
 
     display(name) {
         this.#ui[name].display = this.#ui[name].getAttribute("default-display");
+        this.hideAll();
     }
 
     hide(name) {
@@ -21,3 +22,5 @@ class Ui {
         }
     }
 }
+
+export let ui = new Ui();
