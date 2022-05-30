@@ -24,3 +24,14 @@
     width: 100%;
     height: 100%;
 }
+
+.menuButton {
+    text-align: center;
+    width: 30%;
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+}
+
+.menuButton [selectionImage] {
+    display: none;
+}
