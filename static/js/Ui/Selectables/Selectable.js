@@ -4,6 +4,7 @@ export class Selectable {
     constructor(element) {
         this._element = element;
         this.index = this._element.getAttribute("number");
+        this.name = this._element.getAttribute("name");
     }
 
     select() {}
@@ -11,10 +12,10 @@ export class Selectable {
     unselect() {}
 
     setOnClick(func) {
-        this._element.onClick = func;
+        this._element.onclick = func;
     }
 
     onClick() {
-        this._element.onClick();
+        this._element.onclick();
     }
 }

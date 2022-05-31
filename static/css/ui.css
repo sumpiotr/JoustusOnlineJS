@@ -30,6 +30,7 @@
     width: 30%;
     display: grid;
     grid-template-columns: 1fr 2fr 1fr;
+    cursor: pointer;
 }
 
 .menuButton [selectionImage] {

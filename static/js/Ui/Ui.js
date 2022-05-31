@@ -47,4 +47,16 @@ export class Ui {
         this.#selectables[0].select();
         this.#selectedIndex = 0;
     }
+
+    setOnSelectableClick(buttonName, func) {
+        for (let selectable of this.#selectables) {
+            if (selectable.name == buttonName) {
+                selectable.setOnClick(func);
+            }
+        }
+    }
+
+    selectableClicked() {
+        this.#selectables[this.#selectedIndex].onClick();
+    }
 }

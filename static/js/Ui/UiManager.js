@@ -36,7 +36,14 @@ class UiManager {
             this.#activeUi.selectedIndex -= 1;
         } else if (e.keyCode == "S".charCodeAt(0)) {
             this.#activeUi.selectedIndex += 1;
+        } //13 is ascii code of enter
+        else if (e.keyCode == 13) {
+            this.#activeUi.selectableClicked();
         }
+    }
+
+    setOnSelectableClick(uiId, buttonName, func) {
+        this.#ui[uiId].setOnSelectableClick(buttonName, func);
     }
 }
 
