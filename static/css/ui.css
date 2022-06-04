@@ -1,17 +1,20 @@
-#mainMenu {
+.screen {
     position: absolute;
     bottom: 0;
     top: 0;
     left: 0;
     right: 0;
     padding: 50px;
+    color: white;
+    background-color: black;
+    font-family: "GRENDEL", sans-serif;
+}
+
+#mainMenu {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    background-color: black;
-    color: white;
-    font-family: "GRENDEL", sans-serif;
     font-size: 25px;
 }
 
@@ -35,4 +38,16 @@
 
 .menuButton [selectionImage] {
     display: none;
+}
+
+#waitingScreen {
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    bottom: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    background-color: black;
+    color: white;
 }

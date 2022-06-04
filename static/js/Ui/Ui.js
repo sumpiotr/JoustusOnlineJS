@@ -32,17 +32,17 @@ export class Ui {
 
     display() {
         this.element.style.display = this.element.getAttribute("default-display");
-        this.selectFirst();
+        if (this.#selectables.length > 0) this.selectFirst();
     }
 
     hide() {
         this.element.style.display = "none";
-        this.#selectables[0].unselect();
-        if (this.#selectedIndex >= 0) this.#selectables[this.#selectedIndex].unselect();
+        if (this.#selectedIndex >= 0 && this.#selectables.length > 0) this.#selectables[this.#selectedIndex].unselect();
         this.#selectedIndex = 0;
     }
 
     selectFirst() {
+        if (this.#selectables.length == 0) return;
         if (this.#selectedIndex >= 0) this.#selectables[this.#selectedIndex].unselect();
         this.#selectables[0].select();
         this.#selectedIndex = 0;
