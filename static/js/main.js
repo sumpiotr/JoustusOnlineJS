@@ -6,6 +6,7 @@ const socket = io();
 //UI init
 uiManager.register("mainMenu");
 uiManager.register("waitingScreen");
+uiManager.register("privateGame");
 uiManager.display("mainMenu");
 
 uiManager.setOnSelectableClick("mainMenu", "tutorialButton", () => {
