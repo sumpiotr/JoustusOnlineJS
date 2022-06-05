@@ -17,7 +17,7 @@ uiManager.setOnSelectableClick('mainMenu', 'publicGameButton', ()=>{
 })
 
 //Game init
-gameManager.initCamera('mainCamera')
+gameManager.initCamera('mainCamera', 75, new THREE.Vector3(100, 100, 100))
 gameManager.setCamera('mainCamera')
 
 gameManager.initScene('myScene1')
