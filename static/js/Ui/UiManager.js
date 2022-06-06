@@ -5,6 +5,8 @@ class UiManager {
 
     #activeUi = null;
 
+    #previousUi = null;
+
     constructor() {
         window.addEventListener("keydown", (e) => this.#updateNavigation(e));
     }
@@ -16,6 +18,7 @@ class UiManager {
     display(name) {
         this.hideAll();
         this.#ui[name].display();
+        this.#previousUi = this.#activeUi;
         this.#activeUi = this.#ui[name];
     }
 
@@ -43,6 +46,14 @@ class UiManager {
         } //13 - enter
         else if (e.keyCode == 13) {
             this.#activeUi.selectableClicked();
+        } //27 - esc
+        else if (e.keyCode == 27) {
+            if (this.#previousUi != null) {
+                this.hideAll();
+                this.#previousUi.display();
+                this.#activeUi = this.#previousUi;
+                this.#previousUi = null;
+            }
         }
     }
 

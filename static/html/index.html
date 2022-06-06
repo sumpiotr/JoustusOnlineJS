@@ -54,13 +54,20 @@
 
             <!-- create private game -->
             <div id="privateGame" class="screen" default-display="flex">
-                <div>
+                <h1>Private Game</h1>
+                <div selectable="input" number="1" name="roomName">
                     <label>Room name: </label>
                     <input type="text" />
                 </div>
-                <div>
-                    <label>Room name: </label>
-                    <input type="text" />
+                <div selectable="input" number="2" name="roomName">
+                    <label>Password: </label>
+                    <input type="password" />
+                </div>
+                <div selectable="button" number="3" name="createGame">
+                    <button type="button">Create Game</button>
+                </div>
+                <div selectable="button" number="4" name="joinGame">
+                    <button type="button">Join Game</button>
                 </div>
             </div>
 

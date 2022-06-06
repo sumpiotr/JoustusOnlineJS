@@ -1,3 +1,7 @@
+* {
+    font-family: "GRENDEL", sans-serif;
+}
+
 .screen {
     position: absolute;
     bottom: 0;
@@ -7,14 +11,14 @@
     padding: 50px;
     color: white;
     background-color: black;
-    font-family: "GRENDEL", sans-serif;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 #mainMenu {
     display: flex;
-    flex-direction: column;
     justify-content: space-between;
-    align-items: center;
     font-size: 25px;
 }
 
@@ -40,14 +44,32 @@
     display: none;
 }
 
-#waitingScreen {
+#privateGame > * {
+    margin: 5vh;
+}
+
+div[selectable="input"] {
+    width: 40%;
+    display: flex;
+    justify-content: space-between;
+}
+
+div[selectable="input"] > * {
+    width: 50%;
+}
+
+div[selectable="input"] input:focus {
+    background-color: orange;
+}
+
+div[selectable="button"] {
+    width: 40%;
+    display: flex;
     align-items: center;
     justify-content: center;
-    position: absolute;
-    bottom: 0;
-    top: 0;
-    left: 0;
-    right: 0;
-    background-color: black;
-    color: white;
+}
+
+div[selectable="button"] button {
+    width: 20%;
+    padding: 5px;
 }

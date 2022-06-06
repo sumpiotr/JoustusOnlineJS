@@ -17,6 +17,10 @@ uiManager.setOnSelectableClick("mainMenu", "publicGameButton", () => {
     socket.emit("createRoom", true, "publicGame", "");
 });
 
+uiManager.setOnSelectableClick("mainMenu", "privateGameButton", () => {
+    uiManager.display("privateGame");
+});
+
 //sockets
 socket.on("createRoom", (publicRoom, err) => {
     if (publicRoom) {
