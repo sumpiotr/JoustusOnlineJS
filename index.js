@@ -16,15 +16,23 @@ const server = app.listen(PORT, () => {
 const io = require("socket.io")(server);
 
 io.on("connection", (socket) => {
-    console.log("a user connected");
+    const client = new Client(socket);
+
+    socket.on("disconnect", () => {
+        if (client.room != null) {
+            if (client.room.waiting) {
+                rooms.splice(rooms.indexOf(client.room), 1);
+            } else {
+                //send second player that they are the winner
+            }
+        }
+    });
 
     socket.on("createRoom", (publicRoom, name, password) => {
         if (publicRoom) {
             for (let room of rooms) {
                 if (room.publicRoom && room.waiting) {
-                    let client = new Client(socket, room);
-                    room.join(socket);
-
+                    client.joinRoom(room);
                     return;
                 }
             }
@@ -40,9 +48,9 @@ io.on("connection", (socket) => {
                 }
             }
         }
-        const room = new Room(publicRoom, socket, name, password);
+        const room = new Room(publicRoom, name, password);
         rooms.push(room);
-        let client = new Client(socket, room);
+        client.joinRoom(room);
         socket.emit("createRoom", publicRoom, "");
     });
 });
