@@ -59,4 +59,13 @@ export class Ui {
     selectableClicked() {
         this.#selectables[this.#selectedIndex].onClick();
     }
+
+    getSelectableValue(buttonName) {
+        for (let selectable of this.#selectables) {
+            if (selectable.name == buttonName) {
+                return selectable.getValue();
+            }
+        }
+        return "value not found";
+    }
 }

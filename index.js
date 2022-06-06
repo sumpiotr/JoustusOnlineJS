@@ -40,10 +40,12 @@ io.on("connection", (socket) => {
             password = password.trim();
             name = name.trim();
             if (password == "" || name == "") {
+                socket.emit("createRoom", "Password and name cannot be empty!");
                 return;
             }
             for (let room of rooms) {
                 if (room.name == name) {
+                    socket.emit("createRoom", "A room by that name already existsy!");
                     return;
                 }
             }
@@ -51,7 +53,19 @@ io.on("connection", (socket) => {
         const room = new Room(publicRoom, name, password);
         rooms.push(room);
         client.joinRoom(room);
-        socket.emit("createRoom", publicRoom, "");
+        socket.emit("createRoom", "");
+    });
+
+    socket.on("joinRoom", (name, password) => {
+        for (let room of rooms) {
+            if (!room.publicRoom) {
+                if (room.name == name && room.password == password) {
+                    client.joinRoom(room);
+                    return;
+                }
+            }
+        }
+        socket.emit("createRoom", "Wrong room name or password!");
     });
 });
 

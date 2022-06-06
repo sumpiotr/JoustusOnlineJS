@@ -57,6 +57,10 @@ class UiManager {
         }
     }
 
+    getSelectableValue(uiId, buttonName) {
+        return this.#ui[uiId].getSelectableValue(buttonName);
+    }
+
     setOnSelectableClick(uiId, buttonName, func) {
         this.#ui[uiId].setOnSelectableClick(buttonName, func);
     }

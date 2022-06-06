@@ -48,6 +48,11 @@
     margin: 5vh;
 }
 
+.error {
+    color: red;
+    text-align: center;
+}
+
 div[selectable="input"] {
     width: 40%;
     display: flex;

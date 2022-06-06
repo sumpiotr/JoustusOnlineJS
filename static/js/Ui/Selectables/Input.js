@@ -9,6 +9,10 @@ export class Input extends Selectable {
         this.#input = this._element.querySelector(`input`);
     }
 
+    getValue() {
+        return this.#input.value;
+    }
+
     select() {
         this.#input.focus();
     }

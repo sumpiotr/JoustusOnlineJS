@@ -9,6 +9,9 @@ uiManager.register("waitingScreen");
 uiManager.register("privateGame");
 uiManager.display("mainMenu");
 
+const privateGameErrorInfo = document.getElementById("privateGameErrorInfo");
+
+//main menu
 uiManager.setOnSelectableClick("mainMenu", "tutorialButton", () => {
     window.open("https://www.yachtclubgames.com/blog/joustus-instruction-manual", "_blank");
 });
@@ -21,9 +24,27 @@ uiManager.setOnSelectableClick("mainMenu", "privateGameButton", () => {
     uiManager.display("privateGame");
 });
 
+//private Game
+uiManager.setOnSelectableClick("privateGame", "createGame", () => {
+    let name = uiManager.getSelectableValue("privateGame", "roomName");
+    let password = uiManager.getSelectableValue("privateGame", "roomPassword");
+
+    socket.emit("createRoom", false, name, password);
+});
+
+uiManager.setOnSelectableClick("privateGame", "joinGame", () => {
+    let name = uiManager.getSelectableValue("privateGame", "roomName");
+    let password = uiManager.getSelectableValue("privateGame", "roomPassword");
+
+    socket.emit("joinRoom", name, password);
+});
+
 //sockets
-socket.on("createRoom", (publicRoom, err) => {
-    if (publicRoom) {
+socket.on("createRoom", (err) => {
+    if (err != "") {
+        privateGameErrorInfo.textContent = err;
+        return;
+    } else {
         uiManager.display("waitingScreen");
     }
 });
