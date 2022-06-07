@@ -24,7 +24,8 @@
     </head>
     <body>
         <div id="root">
-            <div id="mainMenu" default-display="flex">
+            <!-- Main menu -->
+            <div id="mainMenu" class="screen" default-display="flex">
                 <div id="logo">
                     <img src="../assets/art/ui/joustusLogo.png" alt="" />
                 </div>
@@ -49,6 +50,31 @@
                     <div></div>
                 </div>
                 <div style="height: 5vh"></div>
+            </div>
+
+            <!-- create private game -->
+            <div id="privateGame" class="screen" default-display="flex">
+                <h1>Private Game</h1>
+                <div selectable="input" number="1" name="roomName">
+                    <label>Room name: </label>
+                    <input type="text" />
+                </div>
+                <div selectable="input" number="2" name="roomPassword">
+                    <label>Password: </label>
+                    <input type="password" />
+                </div>
+                <div selectable="button" number="3" name="createGame">
+                    <button type="button">Create Game</button>
+                </div>
+                <div selectable="button" number="4" name="joinGame">
+                    <button type="button">Join Game</button>
+                </div>
+                <h2 class="error" id="privateGameErrorInfo"></h2>
+            </div>
+
+            <!-- Waiting for other player to join -->
+            <div id="waitingScreen" class="screen" default-display="flex">
+                <h1>Waiting for other player to join...</h1>
             </div>
         </div>
 
