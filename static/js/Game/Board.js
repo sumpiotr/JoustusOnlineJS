@@ -9,26 +9,19 @@ class Board{
         [-1, 0, 0, 0, 0, 0, -1],
         [-1, -1, -1, -1, -1, -1, -1]
     ]
+    #cursor = [1,1]
+    #tiles = []
+    #selected = null
+
+    //to delete and replace with tile class object field color
+    #selectedColor = null
+
     #geometry = new THREE.BoxGeometry(this.#itemSize, this.#itemSize, this.#itemSize);
     #frameVerticalGeometry = new THREE.BoxGeometry(2, this.#itemSize, this.#itemSize);
     #frameHorizontalGeometry = new THREE.BoxGeometry(this.#itemSize+4, 2, this.#itemSize);
-    #itemMaterial = new THREE.MeshBasicMaterial({
-        color: 0xffffff,
-        side: THREE.DoubleSide,
-        wireframe: false
-    });
-    #graveyardMaterial = new THREE.MeshBasicMaterial({
-        color: 0x000000,
-        side: THREE.DoubleSide,
-        wireframe: false,
-        transparent: true,
-    });
-    #boardMaterial = new THREE.MeshBasicMaterial({
-        color: 0x5c422a,
-        side: THREE.DoubleSide,
-        wireframe: false,
-        transparent: true,
-    }); 
+    #itemMaterial = 0xffffff;
+    #graveyardMaterial = 0x000000;
+    #boardMaterial = 0x5c422a; 
     #generated = false
     constructor(){
         window.addEventListener("keydown", (e) => this.#updateNavigation(e));
@@ -49,27 +42,55 @@ class Board{
                     default:
                         if(x!=0 && y!=0 && y!= this.#board.length-1)
                         {
-                            const frame = new THREE.Mesh(this.#frameVerticalGeometry, this.#boardMaterial);
+                            const frame = new THREE.Mesh(this.#frameVerticalGeometry, new THREE.MeshBasicMaterial({
+                                color: this.#boardMaterial,
+                                side: THREE.DoubleSide,
+                                wireframe: false,
+                                transparent: true,
+                            }));
                             frame.position.set(x*(this.#itemSize+2) - this.#board[y].length*(this.#itemSize/2) - (this.#itemSize/2)-1, y*(this.#itemSize+2) - this.#board[y].length*(this.#itemSize/2), 0)
                             this.gameObject.add(frame)
                         }
                         else if(x!=0 && y!=0 && x!= this.#board[y].length-1){
-                            const horizontalFrame = new THREE.Mesh(this.#frameHorizontalGeometry, this.#boardMaterial);
+                            const horizontalFrame = new THREE.Mesh(this.#frameHorizontalGeometry, new THREE.MeshBasicMaterial({
+                                color: this.#boardMaterial,
+                                side: THREE.DoubleSide,
+                                wireframe: false,
+                                transparent: true,
+                            }));
                             horizontalFrame.position.set(x*(this.#itemSize+2) - this.#board[y].length*(this.#itemSize/2), y*(this.#itemSize+2) - this.#board[y].length*(this.#itemSize/2)-(this.#itemSize/2)-1, 0)
                             this.gameObject.add(horizontalFrame)
                         }
+                        this.#tiles.push(null)
                         continue;
                 }
-                //this.#board item
-                const cube = new THREE.Mesh(this.#geometry, material);
+                //board item
+                const cube = new THREE.Mesh(this.#geometry, new THREE.MeshBasicMaterial({
+                    color: material,
+                    side: THREE.DoubleSide,
+                    wireframe: false,
+                    transparent: true,
+                }))
                 cube.position.set(x*(this.#itemSize+2) - this.#board[y].length*(this.#itemSize/2), y*(this.#itemSize+2) - this.#board[y].length*(this.#itemSize/2), 0)
-                //this.#board frame
-                const frame = new THREE.Mesh(this.#frameVerticalGeometry, this.#boardMaterial);
+                this.gameObject.add(cube)
+                this.#tiles.push(cube)
+                //board frame
+                const frame = new THREE.Mesh(this.#frameVerticalGeometry, new THREE.MeshBasicMaterial({
+                    color: this.#boardMaterial,
+                    side: THREE.DoubleSide,
+                    wireframe: false,
+                    transparent: true,
+                }));
                 frame.position.set(x*(this.#itemSize+2) - this.#board[y].length*(this.#itemSize/2) -(this.#itemSize/2)-1, y*(this.#itemSize+2) - this.#board[y].length*(this.#itemSize/2), 0)
                 this.gameObject.add(frame)
-                this.gameObject.add(cube)
+                
 
-                const horizontalFrame = new THREE.Mesh(this.#frameHorizontalGeometry, this.#boardMaterial);
+                const horizontalFrame = new THREE.Mesh(this.#frameHorizontalGeometry, new THREE.MeshBasicMaterial({
+                    color: this.#boardMaterial,
+                    side: THREE.DoubleSide,
+                    wireframe: false,
+                    transparent: true,
+                }));
                 horizontalFrame.position.set(x*(this.#itemSize+2) - this.#board[y].length*(this.#itemSize/2), y*(this.#itemSize+2) - this.#board[y].length*(this.#itemSize/2)-(this.#itemSize/2)-1, 0)
                 this.gameObject.add(horizontalFrame)
             }
@@ -78,21 +99,36 @@ class Board{
     }
 
     #updateNavigation(e) {
-        // if (this.#activeUi == null) return;
+        if (this.#generated == false) return;
+        //38 - arrow up
+        if (e.keyCode == 38 && this.#board[this.#cursor[1]+1][this.#cursor[0]]!=-1) {
+            this.#cursor[1]+=1
+            this.#updateTile()
+        } 
+        //40 - arrow down
+        else if (e.keyCode == 40 && this.#board[this.#cursor[1]-1][this.#cursor[0]]!=-1) {
+            this.#cursor[1]-=1
+            this.#updateTile()
+        } 
+        //37 - arrow left
+        else if (e.keyCode == 37 && this.#board[this.#cursor[0]-1][this.#cursor[0]]!=-1) {
+            this.#cursor[0]-=1
+            this.#updateTile()
+        } 
+        //39 - arrow right
+        else if (e.keyCode == 39  && this.#board[this.#cursor[0]+1][this.#cursor[0]]!=-1) {
+            this.#cursor[0]+=1
+            this.#updateTile()
+        }
+    }
 
-        // //38 - arrow up
-        // if (e.keyCode == 38) {
-        //     this.#activeUi.selectedIndex -= 1;
-        // } else if (e.keyCode == 40) {
-        //     //40 - arrow down
-        //     this.#activeUi.selectedIndex += 1;
-        // } //13 - enter
-        // else if (e.keyCode == 13) {
-        //     this.#activeUi.selectableClicked();
-        // } //27 - esc
-        // else if (e.keyCode == 27) {
-        //     this.back();
-        // }
+    //to delete and replace with tile class object method
+    #updateTile(){
+        if(this.#selected!=null)
+            this.#selected.material.color.setHex(this.#selectedColor)
+        this.#selected = this.#tiles[this.#cursor[1]*(this.#board.length) + this.#cursor[0]]
+        this.#selectedColor = this.#selected.material.color.getHex()
+        this.#selected.material.color.setHex(0xff0000)
     }
 }
 
