@@ -8,9 +8,12 @@ uiManager.register("mainMenu");
 uiManager.register("login");
 uiManager.register("waitingScreen");
 uiManager.register("privateGame");
+uiManager.register("deck");
 uiManager.display("mainMenu");
 
 const privateGameErrorInfo = document.getElementById("privateGameErrorInfo");
+const loginInfo = document.getElementById("loginInfo");
+const loginButtonText = document.getElementById("loginButtonText");
 
 //main menu
 uiManager.setOnSelectableClick("mainMenu", "tutorialButton", () => {
@@ -26,7 +29,7 @@ uiManager.setOnSelectableClick("mainMenu", "privateGameButton", () => {
 });
 
 uiManager.setOnSelectableClick("mainMenu", "loginButton", () => {
-    uiManager.display("login");
+    socket.emit("isLogged");
 });
 
 //private Game
@@ -44,6 +47,23 @@ uiManager.setOnSelectableClick("privateGame", "joinGame", () => {
     socket.emit("joinRoom", name, password);
 });
 
+//login
+
+uiManager.setOnSelectableClick("login", "loginButton", () => {
+    loginInfo.textContent = "";
+    let login = uiManager.getSelectableValue("login", "login");
+    let password = uiManager.getSelectableValue("login", "password");
+    console.log(login, password);
+    socket.emit("login", login, password);
+});
+
+uiManager.setOnSelectableClick("login", "registerButton", () => {
+    loginInfo.textContent = "";
+    let login = uiManager.getSelectableValue("login", "login");
+    let password = uiManager.getSelectableValue("login", "password");
+    socket.emit("register", login, password);
+});
+
 //sockets
 socket.on("createRoom", (err) => {
     if (err != "") {
@@ -52,6 +72,24 @@ socket.on("createRoom", (err) => {
     } else {
         uiManager.display("waitingScreen");
     }
+});
+
+//login
+socket.on("isLogged", (logged) => {
+    if (logged) {
+        uiManager.display("deck");
+    } else {
+        uiManager.display("login");
+    }
+});
+
+socket.on("login", () => {
+    loginButtonText.textContent = "Edit Decks";
+    uiManager.back();
+});
+
+socket.on("loginMessage", (message) => {
+    loginInfo.textContent = message;
 });
 
 socket.on("startGame", () => {

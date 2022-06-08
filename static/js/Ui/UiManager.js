@@ -35,7 +35,6 @@ class UiManager {
 
     #updateNavigation(e) {
         if (this.#activeUi == null) return;
-        console.log(e.keyCode);
 
         //38 - arrow up
         if (e.keyCode == 38) {
@@ -48,12 +47,16 @@ class UiManager {
             this.#activeUi.selectableClicked();
         } //27 - esc
         else if (e.keyCode == 27) {
-            if (this.#previousUi != null) {
-                this.hideAll();
-                this.#previousUi.display();
-                this.#activeUi = this.#previousUi;
-                this.#previousUi = null;
-            }
+            this.back();
+        }
+    }
+
+    back() {
+        if (this.#previousUi != null) {
+            this.hideAll();
+            this.#previousUi.display();
+            this.#activeUi = this.#previousUi;
+            this.#previousUi = null;
         }
     }
 

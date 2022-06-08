@@ -2,11 +2,15 @@ const express = require("express");
 const app = express();
 const PORT = 3000;
 const path = require("path");
-const Room = require("./server/serverJs/Room");
-const Client = require("./server/serverJs/Client");
+const sqlite3 = require("sqlite3").verbose();
 
 app.use(express.json());
 
+//class imports
+const Room = require("./server/serverJs/Room");
+const Client = require("./server/serverJs/Client");
+
+//game data
 const rooms = [];
 
 const cards = require("./server/data/cards.json");
@@ -16,10 +20,20 @@ const server = app.listen(PORT, () => {
     console.log("start serwera na porcie " + PORT);
 });
 
+//database
+{
+    const usersDb = new sqlite3.Database("./server/data/users.db", sqlite3.OPEN_READWRITE, (err) => {
+        if (err) console.error("Database users cannot be loaded!");
+    });
+
+    usersDb.run("CREATE TABLE IF NOT EXISTS users(id INTEGER PRIMARY KEY AUTOINCREMENT, username CHAR(20), password TEXT)");
+    usersDb.close();
+}
+
 const io = require("socket.io")(server);
 
 io.on("connection", (socket) => {
-    const client = new Client(socket);
+    const client = new Client(socket, sqlite3);
 
     socket.on("disconnect", () => {
         if (client.room != null) {
