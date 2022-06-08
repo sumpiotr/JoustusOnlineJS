@@ -1,5 +1,6 @@
 import { uiManager } from "./Ui/UiManager.js";
 import { gameManager } from "./Game/GameManager.js";
+import { board } from "./Game/Board.js";
 
 const socket = io();
 
@@ -95,13 +96,16 @@ socket.on("loginMessage", (message) => {
 socket.on("startGame", () => {
     //start game
     uiManager.hideAll();
+    board.generateBoard()
 });
 
 //Game init
-gameManager.initCamera("mainCamera", 75, new THREE.Vector3(100, 100, 100));
-gameManager.setCamera("mainCamera");
-
 gameManager.initScene("myScene1");
 gameManager.setFocus("myScene1");
+gameManager.initCamera("mainCamera", 75, new THREE.Vector3(0, 0, 100));
+gameManager.setCamera("mainCamera");
+gameManager.cameraFocusOnScene()
+
+gameManager.addToScene('board', board.gameObject)
 
 gameManager.startRenderer();
