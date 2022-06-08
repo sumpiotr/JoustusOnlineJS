@@ -1,5 +1,5 @@
 import { Ui } from "./Ui.js";
-
+import { directions } from "../Enums/Directions.js";
 class UiManager {
     #ui = {};
 
@@ -36,12 +36,20 @@ class UiManager {
     #updateNavigation(e) {
         if (this.#activeUi == null) return;
 
+        console.log(e.keyCode);
+
         //38 - arrow up
         if (e.keyCode == 38) {
-            this.#activeUi.selectedIndex -= 1;
+            this.#activeUi.navigate(directions.up);
         } else if (e.keyCode == 40) {
             //40 - arrow down
-            this.#activeUi.selectedIndex += 1;
+            this.#activeUi.navigate(directions.down);
+        } //39 - right arrow
+        else if (e.keyCode == 39) {
+            this.#activeUi.navigate(directions.right);
+        } //37 - left arrow
+        else if (e.keyCode == 37) {
+            this.#activeUi.navigate(directions.left);
         } //13 - enter
         else if (e.keyCode == 13) {
             this.#activeUi.selectableClicked();

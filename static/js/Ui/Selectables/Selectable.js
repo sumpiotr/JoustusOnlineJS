@@ -7,6 +7,10 @@ export class Selectable {
         this.name = this._element.getAttribute("name");
     }
 
+    getAttribute(name) {
+        return this._element.getAttribute(name);
+    }
+
     getValue() {
         return "";
     }
