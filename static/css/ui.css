@@ -48,6 +48,10 @@
     margin: 5vh;
 }
 
+#login > * {
+    margin: 5vh;
+}
+
 .error {
     color: red;
     text-align: center;

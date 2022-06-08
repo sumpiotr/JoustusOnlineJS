@@ -1,0 +1,29 @@
+{
+    "decks": [
+        {
+            "name": "Simple1",
+            "cards": [
+                "rat",
+                "horse",
+                "bug red",
+                "bug blue",
+                "bug blue",
+                "zombie",
+                "zombie",
+                "ghost",
+                "dragon",
+                "dragon green",
+                "dragon green",
+                "skeleton",
+                "skeleton",
+                "wizard",
+                "big skeleton",
+                "big skeleton"
+            ]
+        },
+        {
+            "name": "Simple2",
+            "cards": ["rat", "horse", "bug red", "bug blue", "zombie", "ghost", "ghost", "dragon", "dragon", "dragon green", "dragon green", "skeleton", "skeleton", "goldarmor", "griffin", "griffin"]
+        }
+    ]
+}

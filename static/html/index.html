@@ -46,7 +46,7 @@
                 </div>
                 <div class="menuButton" selectable="menuButton" number="4" name="loginButton">
                     <div><img src="../assets/art/ui/shovelIcon.png" selectionImage /></div>
-                    <div>Log In</div>
+                    <div id="loginButtonText">Log In</div>
                     <div></div>
                 </div>
                 <div style="height: 5vh"></div>
@@ -68,6 +68,26 @@
                 </div>
                 <div selectable="button" number="4" name="joinGame">
                     <button type="button">Join Game</button>
+                </div>
+                <h2 class="error" id="privateGameErrorInfo"></h2>
+            </div>
+
+            <!-- Log In -->
+            <div id="login" class="screen" default-display="flex">
+                <h1>Log In</h1>
+                <div selectable="input" number="1" name="login">
+                    <label>Login: </label>
+                    <input type="text" />
+                </div>
+                <div selectable="input" number="2" name="password">
+                    <label>Password: </label>
+                    <input type="password" />
+                </div>
+                <div selectable="button" number="3" name="loginButton">
+                    <button type="button">Log in</button>
+                </div>
+                <div selectable="button" number="4" name="register button">
+                    <button type="button">Register</button>
                 </div>
                 <h2 class="error" id="privateGameErrorInfo"></h2>
             </div>

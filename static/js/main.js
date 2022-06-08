@@ -5,6 +5,7 @@ const socket = io();
 
 //UI init
 uiManager.register("mainMenu");
+uiManager.register("login");
 uiManager.register("waitingScreen");
 uiManager.register("privateGame");
 uiManager.display("mainMenu");
@@ -22,6 +23,10 @@ uiManager.setOnSelectableClick("mainMenu", "publicGameButton", () => {
 
 uiManager.setOnSelectableClick("mainMenu", "privateGameButton", () => {
     uiManager.display("privateGame");
+});
+
+uiManager.setOnSelectableClick("mainMenu", "loginButton", () => {
+    uiManager.display("login");
 });
 
 //private Game

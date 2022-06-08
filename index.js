@@ -2,12 +2,15 @@ const express = require("express");
 const app = express();
 const PORT = 3000;
 const path = require("path");
-const Room = require("./serverJs/Room");
-const Client = require("./serverJs/Client");
+const Room = require("./server/serverJs/Room");
+const Client = require("./server/serverJs/Client");
 
 app.use(express.json());
 
 const rooms = [];
+
+const cards = require("./server/data/cards.json");
+const defaultDecks = require("./server/data/defaultDecks.json");
 
 const server = app.listen(PORT, () => {
     console.log("start serwera na porcie " + PORT);
