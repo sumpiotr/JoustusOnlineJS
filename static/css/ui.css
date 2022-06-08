@@ -92,3 +92,39 @@ div[selectable="button"] button {
 .buttonContainer div[selectable="button"] button {
     width: 100%;
 }
+
+#deck {
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+#deckSelection {
+    width: 15%;
+    height: 90%;
+    border: 0.5vh solid orange;
+}
+
+#cardsContainer {
+    display: flex;
+    flex-wrap: wrap;
+    box-sizing: border-box;
+    align-items: flex-start;
+    padding: 3vh;
+    width: 80%;
+    border: 0.8vh solid orange;
+    height: 90%;
+}
+
+.card {
+    width: 8vw;
+    height: 8vw;
+    border-width: 0.3vw;
+    border-style: solid;
+    border-color: black;
+    overflow: hidden;
+}
+
+.card img {
+    width: 500%;
+    height: 600%;
+}

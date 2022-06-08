@@ -84,6 +84,10 @@ io.on("connection", (socket) => {
         }
         socket.emit("createRoom", "Wrong room name or password!");
     });
+
+    socket.on("getCards", () => {
+        socket.emit("setCards", cards.cards);
+    });
 });
 
 app.get("/", (req, res) => {
