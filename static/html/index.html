@@ -29,22 +29,22 @@
                 <div id="logo">
                     <img src="../assets/art/ui/joustusLogo.png" alt="" />
                 </div>
-                <div class="menuButton" selectable="menuButton" number="1" name="publicGameButton">
+                <div class="menuButton" selectable="menuButton" name="publicGameButton" up="loginButton" down="privateGameButton" first>
                     <div><img src="../assets/art/ui/shovelIcon.png" selectionImage /></div>
                     <div>Public Game</div>
                     <div></div>
                 </div>
-                <div class="menuButton" selectable="menuButton" number="2" name="privateGameButton">
+                <div class="menuButton" selectable="menuButton" name="privateGameButton" up="publicGameButton" down="tutorialButton">
                     <div><img src="../assets/art/ui/shovelIcon.png" selectionImage /></div>
                     <div>Private Game</div>
                     <div></div>
                 </div>
-                <div class="menuButton" selectable="menuButton" number="3" name="tutorialButton">
+                <div class="menuButton" selectable="menuButton" name="tutorialButton" up="privateGameButton" down="loginButton">
                     <div><img src="../assets/art/ui/shovelIcon.png" selectionImage /></div>
                     <div>Tutorial</div>
                     <div></div>
                 </div>
-                <div class="menuButton" selectable="menuButton" number="4" name="loginButton">
+                <div class="menuButton" selectable="menuButton" name="loginButton" up="tutorialButton" down="publicGameButton">
                     <div><img src="../assets/art/ui/shovelIcon.png" selectionImage /></div>
                     <div id="loginButtonText">Log In</div>
                     <div></div>
@@ -55,38 +55,41 @@
             <!-- create private game -->
             <div id="privateGame" class="screen" default-display="flex">
                 <h1>Private Game</h1>
-                <div selectable="input" number="1" name="roomName">
+                <div selectable="input" name="roomName" up="createGame" down="roomPassword" first>
                     <label>Room name: </label>
                     <input type="text" />
                 </div>
-                <div selectable="input" number="2" name="roomPassword">
+                <div selectable="input" name="roomPassword" up="roomName" down="createGame">
                     <label>Password: </label>
                     <input type="password" />
                 </div>
-                <div selectable="button" number="3" name="createGame">
-                    <button type="button">Create Game</button>
+                <div class="buttonContainer">
+                    <div selectable="button" name="createGame" up="roomPassword" down="roomName" right="joinGame" left="joinGame">
+                        <button type="button">Create Game</button>
+                    </div>
+                    <div selectable="button" name="joinGame" up="roomPassword" down="roomName" right="createGame" left="createGame">
+                        <button type="button">Join Game</button>
+                    </div>
                 </div>
-                <div selectable="button" number="4" name="joinGame">
-                    <button type="button">Join Game</button>
-                </div>
+
                 <h2 class="error" id="privateGameErrorInfo"></h2>
             </div>
 
             <!-- Log In -->
             <div id="login" class="screen" default-display="flex">
                 <h1>Log In</h1>
-                <div selectable="input" number="1" name="login">
+                <div selectable="input" name="login" up="registerButton" down="password" first>
                     <label>Login: </label>
                     <input type="text" />
                 </div>
-                <div selectable="input" number="2" name="password">
+                <div selectable="input" name="password" up="login" down="loginButton">
                     <label>Password: </label>
                     <input type="password" />
                 </div>
-                <div selectable="button" number="3" name="loginButton">
+                <div selectable="button" name="loginButton" up="password" down="registerButton">
                     <button type="button">Log in</button>
                 </div>
-                <div selectable="button" number="4" name="registerButton">
+                <div selectable="button" name="registerButton" up="loginButton" down="login">
                     <button type="button">Register</button>
                 </div>
                 <h2 class="error" id="loginInfo"></h2>
@@ -94,7 +97,7 @@
 
             <!--Deck Edit-->
             <div id="deck" class="screen" default-display="flex">
-                <h1>Deck edit</h1>
+                <div id="#cardsContainer"></div>
             </div>
 
             <!-- Waiting for other player to join -->

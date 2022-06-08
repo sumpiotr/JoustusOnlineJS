@@ -82,3 +82,13 @@ div[selectable="button"] button {
     width: 20%;
     padding: 5px;
 }
+
+.buttonContainer {
+    display: flex;
+    justify-content: space-evenly;
+    width: 40%;
+}
+
+.buttonContainer div[selectable="button"] button {
+    width: 100%;
+}
