@@ -110,6 +110,7 @@ socket.on("startGame", () => {
 });
 
 //Game init
+uiManager.display("deck");
 gameManager.initScene("myScene1");
 gameManager.setFocus("myScene1");
 gameManager.initCamera("mainCamera", 75, new THREE.Vector3(0, 0, 100));

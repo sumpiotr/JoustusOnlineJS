@@ -1,10 +1,17 @@
+const Deck = require("./Deck");
+const defaultCards = require("../data/defaultDecks.json").cards;
+
 module.exports = class Client {
     #player = null;
     #sqlite = null;
+    #deckDb = null;
+    #deck = null;
 
-    constructor(player, sqlite) {
+    constructor(player, sqlite, deckDb) {
         this.#player = player;
         this.#sqlite = sqlite;
+        this.#deckDb = deckDb;
+        this.#deck = new Deck(defaultCards);
         this.logged = false;
         this.playerId = -1;
 
@@ -37,7 +44,10 @@ module.exports = class Client {
                 var stmt = db.prepare("INSERT INTO users(username, password) VALUES (?,?)");
                 stmt.run(login, password);
                 stmt.finalize();
-                this.#player.emit("loginMessage", "Registered successfully! Now you can login");
+
+                this.#deckDb.insert({ owner: login, cards: defaultCards }, function (err, newDoc) {
+                    this.#player.emit("loginMessage", "Registered successfully! Now you can login");
+                });
             });
             db.close();
         });
@@ -53,7 +63,12 @@ module.exports = class Client {
                     return;
                 }
                 this.logged = true;
-                this.playerId = rows[0].id;
+                this.playerId = rows[0].username;
+
+                this.#deckDb.findOne({ owner: this.playerId }, (err, doc) => {
+                    this.#deck.setCards(doc);
+                });
+
                 this.#player.emit("login");
             });
 

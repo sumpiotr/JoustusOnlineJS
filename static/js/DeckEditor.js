@@ -20,7 +20,7 @@ export class DeckEditor {
     }
 
     setCards(cards) {
-        let i = 0;
+        let i = 1;
         this.#cardsContainer.innerHTML = "";
         for (let card of cards) {
             const cardDiv = document.createElement("div");
@@ -29,17 +29,27 @@ export class DeckEditor {
             cardDiv.setAttribute("name", i);
             cardDiv.setAttribute("right", i + 1);
             cardDiv.setAttribute("left", i - 1);
+
+            let bottomCardIndex = i + 6;
+            while (bottomCardIndex > cards.length) bottomCardIndex--;
+
+            let topCardIndex = i - 6;
+            if (topCardIndex <= 0) topCardIndex = 1;
+
+            cardDiv.setAttribute("down", bottomCardIndex);
+            cardDiv.setAttribute("up", topCardIndex);
             if (i == 0) cardDiv.setAttribute("first", "");
             cardDiv.onclick = () => {
                 console.log(card.name);
             };
 
-            let xOffset = -8 * card.offset.x;
-            let yOffset = -8 * card.offset.y;
+            let xOffset = -100 * card.offset.x;
+            let yOffset = -100 * card.offset.y;
 
             const cardImg = document.createElement("img");
             cardImg.setAttribute("src", imagePath);
-            cardImg.style.objectPosition = `${xOffset}vw ${yOffset}vw`;
+            cardImg.style.left = xOffset + "%";
+            cardImg.style.top = yOffset + "%";
 
             cardDiv.appendChild(cardImg);
 

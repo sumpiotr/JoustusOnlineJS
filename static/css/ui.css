@@ -96,12 +96,18 @@ div[selectable="button"] button {
 #deck {
     flex-direction: row;
     justify-content: space-between;
+    padding: 3vh;
 }
 
 #deckSelection {
-    width: 15%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-sizing: border-box;
+    width: 20%;
     height: 90%;
     border: 0.5vh solid orange;
+    padding: 0.5%;
 }
 
 #cardsContainer {
@@ -110,14 +116,15 @@ div[selectable="button"] button {
     box-sizing: border-box;
     align-items: flex-start;
     padding: 3vh;
-    width: 80%;
+    width: 78%;
     border: 0.8vh solid orange;
     height: 90%;
 }
 
 .card {
-    width: 8vw;
-    height: 8vw;
+    position: relative;
+    width: 15%;
+    padding-top: 15%;
     border-width: 0.3vw;
     border-style: solid;
     border-color: black;
@@ -127,4 +134,31 @@ div[selectable="button"] button {
 .card img {
     width: 500%;
     height: 600%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+}
+
+.cardPreview {
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    width: 95%;
+    height: 4vh;
+    padding: 1.2vw;
+    font-size: 1.5vw;
+    margin: 0.5vh 0;
+    border: 0.1vw solid red;
+}
+
+.cardPreview .card {
+    width: 10%;
+    padding-top: 10%;
+}
+
+.cardPreview .name {
+    width: 80%;
+    text-align: center;
 }
