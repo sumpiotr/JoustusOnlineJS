@@ -18,10 +18,10 @@ class UiManager {
     }
 
     display(name) {
+        this.#previousUi = this.#activeUi;
         this.hideAll();
         this.#uiListeners[name]();
         this.#ui[name].display();
-        this.#previousUi = this.#activeUi;
         this.#activeUi = this.#ui[name];
     }
 

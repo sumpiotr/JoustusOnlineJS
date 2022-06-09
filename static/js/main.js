@@ -94,6 +94,7 @@ socket.on("isLogged", (logged) => {
 });
 
 socket.on("login", () => {
+    console.log("a");
     loginButtonText.textContent = "Edit Decks";
     uiManager.back();
 });

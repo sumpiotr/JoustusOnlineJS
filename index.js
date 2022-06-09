@@ -3,6 +3,7 @@ const app = express();
 const PORT = 3000;
 const path = require("path");
 const sqlite3 = require("sqlite3").verbose();
+const Datastore = require("nedb");
 
 app.use(express.json());
 
@@ -29,6 +30,11 @@ const server = app.listen(PORT, () => {
     usersDb.run("CREATE TABLE IF NOT EXISTS users(id INTEGER PRIMARY KEY AUTOINCREMENT, username CHAR(20), password TEXT)");
     usersDb.close();
 }
+
+const decksDb = new Datastore({
+    filename: "./server/data/decks.db",
+    autoload: true,
+});
 
 const io = require("socket.io")(server);
 
