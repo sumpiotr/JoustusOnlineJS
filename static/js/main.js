@@ -1,8 +1,11 @@
 import { uiManager } from "./Ui/UiManager.js";
 import { gameManager } from "./Game/GameManager.js";
 import { board } from "./Game/Board.js";
+import { DeckEditor } from "./DeckEditor.js";
 
 const socket = io();
+
+const deckEditor = new DeckEditor(socket, uiManager);
 
 //UI init
 uiManager.register("mainMenu");
@@ -65,6 +68,12 @@ uiManager.setOnSelectableClick("login", "registerButton", () => {
     socket.emit("register", login, password);
 });
 
+//decks
+
+uiManager.registerOnOpenListener("deck", () => {
+    deckEditor.getCards();
+});
+
 //sockets
 socket.on("createRoom", (err) => {
     if (err != "") {
@@ -85,6 +94,7 @@ socket.on("isLogged", (logged) => {
 });
 
 socket.on("login", () => {
+    console.log("a");
     loginButtonText.textContent = "Edit Decks";
     uiManager.back();
 });
@@ -96,7 +106,7 @@ socket.on("loginMessage", (message) => {
 socket.on("startGame", () => {
     //start game
     uiManager.hideAll();
-    board.generateBoard()
+    board.generateBoard();
 });
 
 //Game init
@@ -104,8 +114,8 @@ gameManager.initScene("myScene1");
 gameManager.setFocus("myScene1");
 gameManager.initCamera("mainCamera", 75, new THREE.Vector3(0, 0, 100));
 gameManager.setCamera("mainCamera");
-gameManager.cameraFocusOnScene()
+gameManager.cameraFocusOnScene();
 
-gameManager.addToScene('board', board.gameObject)
+gameManager.addToScene("board", board.gameObject);
 
 gameManager.startRenderer();

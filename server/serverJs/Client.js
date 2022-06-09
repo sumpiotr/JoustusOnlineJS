@@ -54,7 +54,6 @@ module.exports = class Client {
                 }
                 this.logged = true;
                 this.playerId = rows[0].id;
-                console.log(this.playerId);
                 this.#player.emit("login");
             });
 

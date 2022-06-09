@@ -8,22 +8,7 @@ export class Ui {
 
     constructor(name) {
         this.element = document.getElementById(name);
-        const selectableElements = this.element.querySelectorAll(`[selectable]`);
-
-        for (let selectableElement of selectableElements) {
-            this.#selectables.push(SelectablesFactory.getSelectable(selectableElement.getAttribute("selectable"), selectableElement));
-        }
-
-        if (this.#selectables.length > 0) {
-            this.#firstSelectable = this.#selectables[0];
-        }
-
-        for (let selectable of this.#selectables) {
-            if (selectable.getAttribute("first") != null) {
-                this.#firstSelectable = selectable;
-                break;
-            }
-        }
+        this.updateSelectables();
     }
 
     display() {
@@ -58,6 +43,7 @@ export class Ui {
     }
 
     navigate(direction) {
+        if (this.#selected == null) return;
         let selectable = null;
         let nextName = null;
         switch (direction) {
@@ -77,7 +63,6 @@ export class Ui {
 
         if (nextName != null) {
             selectable = this.#getSelectableByName(nextName);
-            console.log(nextName, selectable);
             if (selectable != null) {
                 if (this.#selected != null) this.#selected.unselect();
                 selectable.select();
@@ -98,5 +83,27 @@ export class Ui {
     getSelectableValue(buttonName) {
         let selectable = this.#getSelectableByName(buttonName);
         return selectable != null ? selectable.getValue() : "value not found";
+    }
+
+    updateSelectables() {
+        this.#selectables = [];
+        const selectableElements = this.element.querySelectorAll(`[selectable]`);
+
+        for (let selectableElement of selectableElements) {
+            this.#selectables.push(SelectablesFactory.getSelectable(selectableElement.getAttribute("selectable"), selectableElement));
+        }
+
+        if (this.#selectables.length > 0) {
+            this.#firstSelectable = this.#selectables[0];
+        }
+
+        for (let selectable of this.#selectables) {
+            if (selectable.getAttribute("first") != null) {
+                this.#firstSelectable = selectable;
+                break;
+            }
+        }
+
+        this.selectFirst();
     }
 }

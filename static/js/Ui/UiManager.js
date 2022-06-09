@@ -2,6 +2,7 @@ import { Ui } from "./Ui.js";
 import { directions } from "../Enums/Directions.js";
 class UiManager {
     #ui = {};
+    #uiListeners = {};
 
     #activeUi = null;
 
@@ -13,12 +14,14 @@ class UiManager {
 
     register(id) {
         this.#ui[id] = new Ui(id);
+        this.#uiListeners[id] = () => {};
     }
 
     display(name) {
-        this.hideAll();
-        this.#ui[name].display();
         this.#previousUi = this.#activeUi;
+        this.hideAll();
+        this.#uiListeners[name]();
+        this.#ui[name].display();
         this.#activeUi = this.#ui[name];
     }
 
@@ -28,15 +31,18 @@ class UiManager {
     }
 
     hideAll() {
+        this.#activeUi = null;
         for (const [key, value] of Object.entries(this.#ui)) {
             value.hide();
         }
     }
 
+    registerOnOpenListener(name, func) {
+        this.#uiListeners[name] = func;
+    }
+
     #updateNavigation(e) {
         if (this.#activeUi == null) return;
-
-        console.log(e.keyCode);
 
         //38 - arrow up
         if (e.keyCode == 38) {
@@ -74,6 +80,10 @@ class UiManager {
 
     setOnSelectableClick(uiId, buttonName, func) {
         this.#ui[uiId].setOnSelectableClick(buttonName, func);
+    }
+
+    updateSelectables(name) {
+        this.#ui[name].updateSelectables();
     }
 }
 
