@@ -65,6 +65,7 @@ class GameManager{
     startRenderer(){
         requestAnimationFrame(()=>{this.startRenderer()});
         this.#renderer.render(this.#activeScene, this.#activeCamera);
+        console.log(this.#activeScene.children)
     }
     
 }

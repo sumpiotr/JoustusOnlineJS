@@ -1,3 +1,5 @@
+import BoardItem from "./BoardItem.js"
+
 class Board{
     #itemSize = 10
     #board = [
@@ -13,10 +15,6 @@ class Board{
     #tiles = []
     #selected = null
 
-    //to delete and replace with tile class object field color
-    #selectedColor = null
-
-    #geometry = new THREE.BoxGeometry(this.#itemSize, this.#itemSize, this.#itemSize);
     #frameVerticalGeometry = new THREE.BoxGeometry(2, this.#itemSize, this.#itemSize);
     #frameHorizontalGeometry = new THREE.BoxGeometry(this.#itemSize+4, 2, this.#itemSize);
     #itemMaterial = 0xffffff;
@@ -65,12 +63,7 @@ class Board{
                         continue;
                 }
                 //board item
-                const cube = new THREE.Mesh(this.#geometry, new THREE.MeshBasicMaterial({
-                    color: material,
-                    side: THREE.DoubleSide,
-                    wireframe: false,
-                    transparent: true,
-                }))
+                const cube = new BoardItem(material, this.#itemSize)
                 cube.position.set(x*(this.#itemSize+2) - this.#board[y].length*(this.#itemSize/2), y*(this.#itemSize+2) - this.#board[y].length*(this.#itemSize/2), 0)
                 this.gameObject.add(cube)
                 this.#tiles.push(cube)
@@ -125,10 +118,9 @@ class Board{
     //to delete and replace with tile class object method
     #updateTile(){
         if(this.#selected!=null)
-            this.#selected.material.color.setHex(this.#selectedColor)
+            this.#selected.changeColorToOrigin()
         this.#selected = this.#tiles[this.#cursor[1]*(this.#board.length) + this.#cursor[0]]
-        this.#selectedColor = this.#selected.material.color.getHex()
-        this.#selected.material.color.setHex(0xff0000)
+        this.#selected.changeColor(0xff0000)
     }
 }
 
