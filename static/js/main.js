@@ -111,7 +111,6 @@ socket.on("startGame", () => {
 });
 
 //Game init
-uiManager.display("deck");
 gameManager.initScene("myScene1");
 gameManager.setFocus("myScene1");
 gameManager.initCamera("mainCamera", 75, new THREE.Vector3(0, 0, 100));
@@ -120,8 +119,8 @@ gameManager.cameraFocusOnScene();
 
 gameManager.addToScene("board", board.gameObject);
 
-let card = new Card()
-card.position.z = 15
+let card = new Card();
+card.position.z = 15;
 gameManager.addToScene("card", card);
 
 gameManager.startRenderer();
