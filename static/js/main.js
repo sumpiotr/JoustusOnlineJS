@@ -2,6 +2,7 @@ import { uiManager } from "./Ui/UiManager.js";
 import { gameManager } from "./Game/GameManager.js";
 import { board } from "./Game/Board.js";
 import { DeckEditor } from "./DeckEditor.js";
+import Card from "./Game/Card.js";
 
 const socket = io();
 
@@ -117,5 +118,9 @@ gameManager.setCamera("mainCamera");
 gameManager.cameraFocusOnScene();
 
 gameManager.addToScene("board", board.gameObject);
+
+let card = new Card()
+card.position.z = 15
+gameManager.addToScene("card", card);
 
 gameManager.startRenderer();
