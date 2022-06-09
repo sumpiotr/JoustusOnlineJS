@@ -31,6 +31,7 @@ class UiManager {
     }
 
     hideAll() {
+        this.#activeUi = null;
         for (const [key, value] of Object.entries(this.#ui)) {
             value.hide();
         }
