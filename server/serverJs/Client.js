@@ -23,6 +23,17 @@ module.exports = class Client {
             this.#player.emit("isLogged", this.logged);
         });
 
+        this.#player.on("getDeck", () => {
+            if (this.logged) {
+                this.#deckDb.findOne({ owner: this.playerId }, (err, doc) => {
+                    this.#player.emit("setDeck", this.#deck.getCards());
+                });
+            } else {
+                this.#player.emit("setDeck", defaultCards);
+            }
+        });
+
+        //#region login
         this.#player.on("register", (login, password) => {
             login = login.trim();
             password = password.trim();
@@ -74,6 +85,7 @@ module.exports = class Client {
 
             db.close();
         });
+        //#endregion
     }
 
     joinRoom(room) {
