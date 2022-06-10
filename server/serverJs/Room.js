@@ -1,3 +1,5 @@
+const Game = require("./Game/Game.js");
+
 module.exports = class Room {
     #players = [];
 
@@ -6,6 +8,8 @@ module.exports = class Room {
         this.publicRoom = publicRoom;
         this.name = name;
         this.password = password;
+
+        this.game = new Game();
     }
 
     join(newPlayer) {

@@ -13,8 +13,11 @@ module.exports = class Client {
         this.#sqlite = sqlite;
         this.#deckDb = deckDb;
         this.#deck = new Deck(defaultDeck);
+        this.room = null;
         this.logged = false;
         this.playerId = -1;
+
+        this.firstPlayer = true;
 
         this.setSocket();
     }
@@ -54,6 +57,10 @@ module.exports = class Client {
                 this.#player.emit("saveDeck", "Deck Saved!");
             });
         });
+
+        //#endregion
+
+        //#region game logic
 
         //#endregion
 
@@ -116,8 +123,14 @@ module.exports = class Client {
         this.room = room;
         if (room.join(this.#player)) {
             if (!room.waiting) {
-                this.#player.emit("startGame");
-                this.room.getOppositePlayer(this.#player).emit("startGame");
+                this.firstPlayer = false;
+                let myTurn = this.firstPlayer == this.room.game.firstPlayerTurn;
+                let gems = this.room.game.getGemsPosition();
+
+                this.room.game.gameStarted = true;
+
+                this.#player.emit("startGame", myTurn, gems);
+                this.room.getOppositePlayer(this.#player).emit("startGame", !myTurn, gems);
             }
         }
     }

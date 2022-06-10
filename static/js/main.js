@@ -113,8 +113,10 @@ socket.on("loginMessage", (message) => {
     loginInfo.textContent = message;
 });
 
-socket.on("startGame", () => {
+//gems positions is table of {x: int, y:int} objects; myTurn is bolean
+socket.on("startGame", (myTurn, gemsPositions) => {
     //start game
+    console.log(myTurn, gemsPositions);
     uiManager.hideAll();
     board.generateBoard();
 });
