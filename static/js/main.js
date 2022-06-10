@@ -73,6 +73,15 @@ uiManager.setOnSelectableClick("login", "registerButton", () => {
 
 uiManager.registerOnOpenListener("deck", () => {
     deckEditor.getCards();
+    deckEditor.getDeck();
+});
+
+uiManager.setOnSelectableClick("deck", "cancelDeck", () => {
+    deckEditor.getDeck();
+});
+
+uiManager.setOnSelectableClick("deck", "saveDeck", () => {
+    deckEditor.saveDeck();
 });
 
 //sockets

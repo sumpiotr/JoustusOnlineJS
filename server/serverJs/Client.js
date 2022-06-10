@@ -1,5 +1,6 @@
 const Deck = require("./Deck");
-const defaultCards = require("../data/defaultDecks.json").cards;
+const defaultDeck = require("../data/defaultDecks.json").cards;
+const cards = require("../data/cards.json").cards;
 
 module.exports = class Client {
     #player = null;
@@ -11,7 +12,7 @@ module.exports = class Client {
         this.#player = player;
         this.#sqlite = sqlite;
         this.#deckDb = deckDb;
-        this.#deck = new Deck(defaultCards);
+        this.#deck = new Deck(defaultDeck);
         this.logged = false;
         this.playerId = -1;
 
@@ -23,15 +24,38 @@ module.exports = class Client {
             this.#player.emit("isLogged", this.logged);
         });
 
+        //#region edit deck
+
         this.#player.on("getDeck", () => {
-            if (this.logged) {
-                this.#deckDb.findOne({ owner: this.playerId }, (err, doc) => {
-                    this.#player.emit("setDeck", this.#deck.getCards());
-                });
-            } else {
-                this.#player.emit("setDeck", defaultCards);
-            }
+            this.#player.emit("setDeck", this.#deck.getCards());
         });
+
+        this.#player.on("saveDeck", (deck) => {
+            if (!this.logged) {
+                this.#player.emit("saveDeck", "Not logged!");
+                return;
+            }
+
+            if (deck.length != 16) {
+                this.#player.emit("saveDeck", "Deck must have 16 cards!");
+                return;
+            }
+
+            for (let name of deck) {
+                if (this.getCardByName(name) == null) {
+                    this.#player.emit("saveDeck", "Wrong card data!");
+                    return;
+                }
+            }
+
+            console.log(this.playerId);
+            this.#deckDb.update({ owner: this.playerId }, { $set: { owner: this.playerId, cards: deck } }, {}, (err, numUpdated) => {
+                this.#deck.setCards(deck);
+                this.#player.emit("saveDeck", "Deck Saved!");
+            });
+        });
+
+        //#endregion
 
         //#region login
         this.#player.on("register", (login, password) => {
@@ -56,7 +80,7 @@ module.exports = class Client {
                 stmt.run(login, password);
                 stmt.finalize();
 
-                this.#deckDb.insert({ owner: login, cards: defaultCards }, function (err, newDoc) {
+                this.#deckDb.insert({ owner: login, cards: defaultDeck }, (err, newDoc) => {
                     this.#player.emit("loginMessage", "Registered successfully! Now you can login");
                 });
             });
@@ -77,7 +101,7 @@ module.exports = class Client {
                 this.playerId = rows[0].username;
 
                 this.#deckDb.findOne({ owner: this.playerId }, (err, doc) => {
-                    this.#deck.setCards(doc);
+                    this.#deck.setCards(doc.cards);
                 });
 
                 this.#player.emit("login");
@@ -96,5 +120,12 @@ module.exports = class Client {
                 this.room.getOppositePlayer(this.#player).emit("startGame");
             }
         }
+    }
+
+    getCardByName(name) {
+        for (let card of cards) {
+            if (card.name == name) return card;
+        }
+        return null;
     }
 };

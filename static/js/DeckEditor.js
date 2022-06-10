@@ -5,8 +5,9 @@ export class DeckEditor {
     #cardsContainer = null;
     #uiManager = null;
     #deckContainer = null;
-    #cards = [];
+    #deckInfo = null;
 
+    #cards = [];
     #deck = [];
 
     constructor(socket, uiManager) {
@@ -14,6 +15,7 @@ export class DeckEditor {
         this.#uiManager = uiManager;
         this.#cardsContainer = document.getElementById("cardsContainer");
         this.#deckContainer = document.getElementById("deckSelection");
+        this.#deckInfo = document.getElementById("deckInfo");
 
         this.#socket.on("setCards", (cards) => {
             this.#cards = cards;
@@ -24,16 +26,29 @@ export class DeckEditor {
             this.#deck = cardsNames;
             this.setDeck();
         });
+
+        this.#socket.on("saveDeck", (message) => {
+            this.#deckInfo.textContent = message;
+        });
+    }
+
+    saveDeck() {
+        this.#socket.emit("saveDeck", this.#deck);
     }
 
     getCards() {
+        this.#deckInfo.textContent = "";
         this.#socket.emit("getCards");
+    }
+
+    getDeck() {
         this.#socket.emit("getDeck");
     }
 
     setCards(cards) {
         let i = 1;
         this.#cardsContainer.innerHTML = "";
+
         for (let card of cards) {
             const cardDiv = document.createElement("div");
             cardDiv.className = "card";
@@ -52,6 +67,10 @@ export class DeckEditor {
 
             let topCardIndex = i - 6;
             if (topCardIndex <= 0) topCardIndex = 1;
+
+            if (cards.length - i < 6) {
+                bottomCardIndex = "saveDeck";
+            }
 
             cardDiv.setAttribute("down", bottomCardIndex);
             cardDiv.setAttribute("up", topCardIndex);
@@ -83,14 +102,27 @@ export class DeckEditor {
     setDeck() {
         this.#deckContainer.innerHTML = "";
 
+        let uniqeCards = [...new Set(this.#deck)];
+
+        const counts = {};
+        this.#deck.forEach(function (value) {
+            counts[value] = (counts[value] || 0) + 1;
+        });
+
         let i = 1;
-        for (let name of this.#deck) {
+        for (let name of uniqeCards) {
             const card = this.#getCardByName(name);
             const container = document.createElement("div");
             container.className = "cardPreview";
             container.setAttribute("selectable", "borderHiglight");
             container.setAttribute("name", `deck${i}`);
-            container.setAttribute("down", `deck${i + 1}`);
+
+            if (i == uniqeCards.length) {
+                container.setAttribute("down", `saveDeck`);
+            } else {
+                container.setAttribute("down", `deck${i + 1}`);
+            }
+
             container.setAttribute("up", `deck${i - 1}`);
             container.setAttribute("left", "1");
             container.setAttribute("defaultBorder", "white");
@@ -113,7 +145,7 @@ export class DeckEditor {
 
             const nameDiv = document.createElement("div");
             nameDiv.className = "name";
-            nameDiv.textContent = card.name;
+            nameDiv.textContent = `${counts[name]}x ${card.name}`;
 
             cardDiv.appendChild(cardImg);
 

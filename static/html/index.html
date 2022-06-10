@@ -97,8 +97,21 @@
 
             <!--Deck Edit-->
             <div id="deck" class="screen" default-display="flex">
-                <div id="cardsContainer"></div>
-                <div id="deckSelection"></div>
+                <div id="deckEdit">
+                    <div id="cardsContainer"></div>
+                    <div id="deckSelection"></div>
+                </div>
+
+                <div id="deckOptions">
+                    <div selectable="button" name="saveDeck" up="1" left="1" right="cancelDeck">
+                        <button type="button">Save</button>
+                    </div>
+                    <div selectable="button" name="cancelDeck" up="1" left="saveDeck" right="deck1">
+                        <button type="button">Cancel</button>
+                    </div>
+                </div>
+
+                <div class="error" id="deckInfo"></div>
             </div>
 
             <!-- Waiting for other player to join -->

@@ -46,6 +46,7 @@ io.on("connection", (socket) => {
             if (client.room.waiting) {
                 rooms.splice(rooms.indexOf(client.room), 1);
             } else {
+                rooms.splice(rooms.indexOf(client.room), 1);
                 //send second player that they are the winner
             }
         }

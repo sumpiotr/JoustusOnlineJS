@@ -63,11 +63,6 @@
             "offset": { "x": 3, "y": 2 }
         },
         {
-            "name": "big skeleton",
-            "arrows": [0, 1, 1, 1],
-            "offset": { "x": 0, "y": 2 }
-        },
-        {
             "name": "griffin",
             "arrows": [1, 1, 1, 0],
             "offset": { "x": 4, "y": 2 }
