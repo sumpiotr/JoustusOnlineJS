@@ -3,6 +3,7 @@ import { gameManager } from "./Game/GameManager.js";
 import { board } from "./Game/Board.js";
 import { DeckEditor } from "./DeckEditor.js";
 import Card from "./Game/Card.js";
+import { myHand, enemyHand } from "./Game/Hand.js";
 
 const socket = io();
 
@@ -118,11 +119,13 @@ socket.on("startGame", (myTurn, gemsPositions) => {
     //start game
     uiManager.hideAll();
     board.generateBoard(gemsPositions);
-    
+    myHand.generateHand()
+    enemyHand.generateHand()
+    if(myTurn)myHand.activate((card)=>{board.activate(card)})
 });
 
-socket.on("drawCard", (id, card, cos)=>{
-    console.log(id, card, cos)
+socket.on("drawCard", (id, card, isMine)=>{
+    isMine?myHand.addCard(card, id):enemyHand.addCard(card, id)
 })
 
 //Game init
@@ -133,9 +136,9 @@ gameManager.setCamera("mainCamera");
 gameManager.cameraFocusOnScene();
 
 gameManager.addToScene("board", board.gameObject);
-//gameManager.addToScene("myHand", )
-
-let card = new Card(0,0,1,'red', null);
-gameManager.addToScene("card", card);
+gameManager.addToScene("myHand", myHand.gameObject)
+gameManager.addToScene('enemyHand', enemyHand.gameObject)
+myHand.gameObject.position.x = -45
+enemyHand.gameObject.position.x = 45
 
 gameManager.startRenderer();

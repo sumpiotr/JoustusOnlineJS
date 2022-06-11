@@ -15,7 +15,9 @@ class Board {
     #cursor = [3,3]
     #tiles = []
     #selected = null
+    #selectedCard = null
     #itemMaterial = `../../assets/art/JoustusBoards/Joustus-3X3.png`;
+    #active = false
 
     constructor(){
         this.gameObject = new THREE.Object3D()
@@ -53,8 +55,16 @@ class Board {
         });
     }
 
+    activate(card){
+        this.#active = true
+        this.#selectedCard = card
+        this.gameObject.add(card)
+        const tileToPlace = this.#tiles[this.#cursor[1] * this.#board.length + this.#cursor[0]].position
+        this.#selectedCard.position.set(tileToPlace.x, tileToPlace.y, 15)
+    }
+
     #updateNavigation(e) {
-        //if (this.#generated == false) return;
+        if (this.#active == false) return;
         //38 - arrow up
         if (e.keyCode == 38 && this.#board[this.#cursor[1] + 1][this.#cursor[0]] != -1) {
             this.#cursor[1] += 1;
@@ -66,21 +76,21 @@ class Board {
             this.#updateTile();
         }
         //37 - arrow left
-        else if (e.keyCode == 37 && this.#board[this.#cursor[0] - 1][this.#cursor[0]] != -1) {
+        else if (e.keyCode == 37 && this.#board[this.#cursor[1]][this.#cursor[0]-1] != -1) {
             this.#cursor[0] -= 1;
             this.#updateTile();
         }
         //39 - arrow right
-        else if (e.keyCode == 39 && this.#board[this.#cursor[0] + 1][this.#cursor[0]] != -1) {
+        else if (e.keyCode == 39 && this.#board[this.#cursor[1]][this.#cursor[0]+1] != -1) {
             this.#cursor[0] += 1;
             this.#updateTile();
         }
     }
 
-    #updateTile() {
-        if (this.#selected != null) this.#selected.changeColorToOrigin();
+    #updateTile(from) {
         this.#selected = this.#tiles[this.#cursor[1] * this.#board.length + this.#cursor[0]];
-        this.#selected.changeColor(0xff0000);
+        const tileToPlace = this.#tiles[this.#cursor[1] * this.#board.length + this.#cursor[0]]
+        this.#selectedCard.position.set(tileToPlace.position.x, tileToPlace.position.y, 15)
     }
 }
 

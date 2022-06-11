@@ -4,8 +4,8 @@ class Gem extends THREE.Mesh{
         let tex = new THREE.TextureLoader().load('../../assets/art/JoustusPieces/Joustus-Gems.png')
         tex.repeat.x = 64/ 128;
         tex.repeat.y = 64 / 128;
-        tex.offset.x = 0;
-        tex.offset.y = 0;
+        tex.offset.x = 0*tex.repeat.x;
+        tex.offset.y = 0*tex.repeat.y;
         let material = new THREE.MeshBasicMaterial({
             side: THREE.DoubleSide,
             wireframe: false,

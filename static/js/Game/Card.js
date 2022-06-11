@@ -1,4 +1,5 @@
 class Card extends THREE.Mesh{
+    #color = 0xffffff
     constructor(offsetX, offsetY, sheet, color, directions){
         let geometry = new THREE.BoxGeometry(8, 8, 1);
         const tex = color=='blue'?new THREE.ImageUtils.loadTexture(`../../assets/art/JoustusCards/Joustus_${sheet}.png`):new THREE.ImageUtils.loadTexture(`../../assets/art/JoustusCards/red-joustus-${sheet}.png`)
@@ -18,6 +19,15 @@ class Card extends THREE.Mesh{
         this.position.z = 15
         this.color = color
         this.directions = directions
+    }
+
+    //uses hex
+    changeColor(color){
+        this.material.color.setHex(color)
+    }
+
+    changeColorToOrigin(){
+        this.material.color.setHex(this.#color)
     }
 }
 

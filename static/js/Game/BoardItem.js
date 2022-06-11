@@ -17,15 +17,6 @@ class BoardItem extends THREE.Mesh{
         this.#color = 0xffffff
         this.containsGem = false
     }
-
-    //uses hex
-    changeColor(color){
-        this.material.color.setHex(color)
-    }
-
-    changeColorToOrigin(){
-        this.material.color.setHex(this.#color)
-    }
 }
 
 export default BoardItem
