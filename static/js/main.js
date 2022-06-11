@@ -137,13 +137,15 @@ socket.on("drawCard", (id, card, isMine)=>{
 socket.on("canPlaceCard", (data)=>{ 
     console.log(data.message)
     if(data.value){
-        board.onEnter = (cardId, position, direction)=>{socket.emit("placeCard", cardId*1, position, direction)}
+        board.onEnter = (cardId, position, direction)=>{socket.emit("placeCard", cardId, position, direction)}
     }
 })
 
 socket.on("placeCard", (cardId, position, direction, my)=>{
-    console.log(cardId, position, direction, my)
-    //myTurn = !my
+    board.placedCard(position, direction)
+    if(!my){
+        myHand.activate((card)=>{board.activate(card)})
+    }
 })
 
 //Game init

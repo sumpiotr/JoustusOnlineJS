@@ -100,7 +100,9 @@ class Board {
             else{
                 let movedCard = this.getPlacedCardData()
                 console.log(movedCard)
-                this.onEnter(movedCard.id, movedCard.position, movedCard.direction)
+                this.#active = true
+                this.onEnter(movedCard.cardId, movedCard.position, movedCard.direction)
+
             }
         }
     }
