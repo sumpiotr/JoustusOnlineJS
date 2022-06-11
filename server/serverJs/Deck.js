@@ -32,6 +32,8 @@ module.exports = class Deck {
         let card = this.#deck[randomIndex];
         this.#discarded.push(card);
         this.#deck.splice(randomIndex, 1);
+
+        this.hand[cardIndex] = card;
         return { card: card, id: cardIndex };
     }
 
