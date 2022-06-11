@@ -1,5 +1,4 @@
 class BoardItem extends THREE.Mesh{
-    #color = 0x000000
     constructor(texture, size, offsetX, offsetY){
         let geometry = new THREE.BoxGeometry(size, size, 1);
         let tex = new THREE.TextureLoader().load(texture)
@@ -14,7 +13,6 @@ class BoardItem extends THREE.Mesh{
             map:tex
         })
         super(geometry, material)
-        this.#color = 0xffffff
         this.containsGem = false
     }
 }

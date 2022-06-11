@@ -5,6 +5,7 @@ import { DeckEditor } from "./DeckEditor.js";
 import { hintManager, hintTypes } from "./Game/HintManager.js";
 import Card from "./Game/Card.js";
 import { myHand, enemyHand } from "./Game/Hand.js";
+import { directions } from "./Enums/Directions.js";
 
 const socket = io();
 
@@ -120,6 +121,10 @@ socket.on("startGame", (myTurn, gemsPositions) => {
     //start game
     uiManager.hideAll();
     board.generateBoard(gemsPositions);
+    board.onMove = (cardId, position, direction)=>{
+        socket.emit("canPlaceCard", cardId, position, direction)
+        board.getPlacedCardData = ()=>{return{cardId:cardId, position:position, direction:direction}}
+    }
     myHand.generateHand()
     enemyHand.generateHand()
     if(myTurn)myHand.activate((card)=>{board.activate(card)})
@@ -127,6 +132,18 @@ socket.on("startGame", (myTurn, gemsPositions) => {
 
 socket.on("drawCard", (id, card, isMine)=>{
     isMine?myHand.addCard(card, id):enemyHand.addCard(card, id)
+})
+
+socket.on("canPlaceCard", (data)=>{ 
+    console.log(data.message)
+    if(data.value){
+        board.onEnter = (cardId, position, direction)=>{socket.emit("placeCard", cardId*1, position, direction)}
+    }
+})
+
+socket.on("placeCard", (cardId, position, direction, my)=>{
+    console.log(cardId, position, direction, my)
+    //myTurn = !my
 })
 
 //Game init

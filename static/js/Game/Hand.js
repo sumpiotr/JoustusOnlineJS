@@ -22,7 +22,7 @@ class Hand {
     }
 
     addCard(card, index){
-        this.#cards[index]= this.#name=='player'?new Card(card.offset.x,card.offset.y, card.sheet, 'blue', card.directions):new Card(card.offset.x,card.offset.y, card.sheet, 'red', card.directions)
+        this.#cards[index]= this.#name=='player'?new Card(card.offset.x,card.offset.y, card.sheet, 'blue', card.directions, index):new Card(card.offset.x,card.offset.y, card.sheet, 'red', card.directions, index)
         this.gameObject.add(this.#cards[index])
     }
 
@@ -33,7 +33,6 @@ class Hand {
     }
 
     #updateNavigation(e) {
-        console.log(this.#active)
         if (this.#active == false || this.#name=='enemy') return;
         //38 - arrow up
         if (e.keyCode == 38 && this.#cursor-1 > -1) {
