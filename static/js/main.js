@@ -2,6 +2,7 @@ import { uiManager } from "./Ui/UiManager.js";
 import { gameManager } from "./Game/GameManager.js";
 import { board } from "./Game/Board.js";
 import { DeckEditor } from "./DeckEditor.js";
+import { hintManager, hintTypes } from "./Game/HintManager.js";
 import Card from "./Game/Card.js";
 
 const socket = io();
@@ -118,13 +119,12 @@ socket.on("startGame", (myTurn, gemsPositions) => {
     //start game
     uiManager.hideAll();
     board.generateBoard(gemsPositions);
-    
 });
 //this.#player.emit("drawCard", newCard.id, this.getCardByName(newCard.card), true);
 
-socket.on("drawCard", (id, card, cos)=>{
-    console.log(id, card, cos)
-})
+socket.on("drawCard", (id, card, cos) => {
+    console.log(id, card, cos);
+});
 
 //Game init
 gameManager.initScene("myScene1");
@@ -136,7 +136,7 @@ gameManager.cameraFocusOnScene();
 gameManager.addToScene("board", board.gameObject);
 //gameManager.addToScene("myHand", )
 
-let card = new Card(0,0,1,'red', null);
+let card = new Card(0, 0, 1, "red", null);
 gameManager.addToScene("card", card);
 
 gameManager.startRenderer();
