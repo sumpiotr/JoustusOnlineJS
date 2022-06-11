@@ -1,8 +1,8 @@
 import BoardItem from "./BoardItem.js"
 import Gem from "./Gem.js"
 
-class Board{
-    #itemSize = 10
+class Board {
+    #itemSize = 10;
     #board = [
         [-1, -1, -1, -1, -1, -1, -1],
         [-1, -1, 0, 0, 0, -1, -1],
@@ -65,34 +65,33 @@ class Board{
     #updateNavigation(e) {
         //if (this.#generated == false) return;
         //38 - arrow up
-        if (e.keyCode == 38 && this.#board[this.#cursor[1]+1][this.#cursor[0]]!=-1) {
-            this.#cursor[1]+=1
-            this.#updateTile()
-        } 
+        if (e.keyCode == 38 && this.#board[this.#cursor[1] + 1][this.#cursor[0]] != -1) {
+            this.#cursor[1] += 1;
+            this.#updateTile();
+        }
         //40 - arrow down
-        else if (e.keyCode == 40 && this.#board[this.#cursor[1]-1][this.#cursor[0]]!=-1) {
-            this.#cursor[1]-=1
-            this.#updateTile()
-        } 
+        else if (e.keyCode == 40 && this.#board[this.#cursor[1] - 1][this.#cursor[0]] != -1) {
+            this.#cursor[1] -= 1;
+            this.#updateTile();
+        }
         //37 - arrow left
-        else if (e.keyCode == 37 && this.#board[this.#cursor[0]-1][this.#cursor[0]]!=-1) {
-            this.#cursor[0]-=1
-            this.#updateTile()
-        } 
+        else if (e.keyCode == 37 && this.#board[this.#cursor[0] - 1][this.#cursor[0]] != -1) {
+            this.#cursor[0] -= 1;
+            this.#updateTile();
+        }
         //39 - arrow right
-        else if (e.keyCode == 39  && this.#board[this.#cursor[0]+1][this.#cursor[0]]!=-1) {
-            this.#cursor[0]+=1
-            this.#updateTile()
+        else if (e.keyCode == 39 && this.#board[this.#cursor[0] + 1][this.#cursor[0]] != -1) {
+            this.#cursor[0] += 1;
+            this.#updateTile();
         }
     }
 
     //to delete and replace with tile class object method
-    #updateTile(){
-        if(this.#selected!=null)
-            this.#selected.changeColorToOrigin()
-        this.#selected = this.#tiles[this.#cursor[1]*(this.#board.length) + this.#cursor[0]]
-        this.#selected.changeColor(0xff0000)
+    #updateTile() {
+        if (this.#selected != null) this.#selected.changeColorToOrigin();
+        this.#selected = this.#tiles[this.#cursor[1] * this.#board.length + this.#cursor[0]];
+        this.#selected.changeColor(0xff0000);
     }
 }
 
-export const board = new Board()
+export const board = new Board();

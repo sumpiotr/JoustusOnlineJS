@@ -2,6 +2,7 @@ const Game = require("./Game/Game.js");
 
 module.exports = class Room {
     #players = [];
+    #clients = [];
 
     constructor(publicRoom, name = "", password = "") {
         this.waiting = true;
@@ -12,13 +13,20 @@ module.exports = class Room {
         this.game = new Game();
     }
 
-    join(newPlayer) {
+    join(newSocket, client) {
         if (this.#players.length < 2) {
-            this.#players.push(newPlayer);
+            this.#clients.push(client);
+            this.#players.push(newSocket);
             if (this.#players.length == 2) this.waiting = false;
             return true;
         } else {
             return false;
+        }
+    }
+
+    startGame() {
+        for (let client of this.#clients) {
+            client.startGame();
         }
     }
 
