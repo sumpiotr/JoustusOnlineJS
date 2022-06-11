@@ -1,6 +1,6 @@
 class Card extends THREE.Mesh{
     constructor(offsetX, offsetY, sheet, color, directions){
-        let geometry = new THREE.BoxGeometry(10, 10, 1);
+        let geometry = new THREE.BoxGeometry(8, 8, 1);
         const tex = color=='blue'?new THREE.ImageUtils.loadTexture(`../../assets/art/JoustusCards/Joustus_${sheet}.png`):new THREE.ImageUtils.loadTexture(`../../assets/art/JoustusCards/red-joustus-${sheet}.png`)
         tex.repeat.x = 510 / 2550;
         tex.repeat.y = 510 / 3056;
