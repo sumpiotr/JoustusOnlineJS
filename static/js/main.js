@@ -118,7 +118,7 @@ socket.on("startGame", (myTurn, gemsPositions) => {
     //start game
     console.log(myTurn, gemsPositions);
     uiManager.hideAll();
-    board.generateBoard();
+    board.generateBoard(gemsPositions);
 });
 
 //Game init
@@ -130,8 +130,7 @@ gameManager.cameraFocusOnScene();
 
 gameManager.addToScene("board", board.gameObject);
 
-let card = new Card();
-card.position.z = 15;
+let card = new Card(0,0,1,'red', null);
 gameManager.addToScene("card", card);
 
 gameManager.startRenderer();

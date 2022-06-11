@@ -1,98 +1,69 @@
 import BoardItem from "./BoardItem.js"
+import Gem from "./Gem.js"
 
 class Board{
     #itemSize = 10
     #board = [
         [-1, -1, -1, -1, -1, -1, -1],
-        [-1, 0, 0, 0, 0, 0, -1],
+        [-1, -1, 0, 0, 0, -1, -1],
         [-1, 0, 1, 1, 1, 0, -1],
         [-1, 0, 1, 1, 1, 0, -1],
         [-1, 0, 1, 1, 1, 0, -1],
-        [-1, 0, 0, 0, 0, 0, -1],
+        [-1, -1, 0, 0, 0, -1, -1],
         [-1, -1, -1, -1, -1, -1, -1]
     ]
-    #cursor = [1,1]
+    #cursor = [3,3]
     #tiles = []
     #selected = null
 
     #frameVerticalGeometry = new THREE.BoxGeometry(2, this.#itemSize, this.#itemSize);
     #frameHorizontalGeometry = new THREE.BoxGeometry(this.#itemSize+4, 2, this.#itemSize);
-    #itemMaterial = 0xffffff;
-    #graveyardMaterial = 0x000000;
-    #boardMaterial = 0x5c422a; 
-    #generated = false
+    #itemMaterial = `../../assets/art/JoustusBoards/Joustus-3X3.png`;
+    #boardMaterial =new THREE.MeshBasicMaterial({
+        color: 0x5c422a,
+        side: THREE.DoubleSide,
+        wireframe: false,
+        transparent: true,
+    })
+
     constructor(){
-        window.addEventListener("keydown", (e) => this.#updateNavigation(e));
         this.gameObject = new THREE.Object3D()
     }
 
-    generateBoard(){
+    generateBoard(gemsPositions){
         for(let y=0; y<this.#board.length; y++){
             for(let x=0; x<this.#board[y].length; x++){
-                let material = null
-                switch(this.#board[y][x]){
-                    case 0:
-                        material = this.#graveyardMaterial
-                        break;
-                    case 1:
-                        material = this.#itemMaterial
-                        break;
-                    default:
-                        if(x!=0 && y!=0 && y!= this.#board.length-1)
-                        {
-                            const frame = new THREE.Mesh(this.#frameVerticalGeometry, new THREE.MeshBasicMaterial({
-                                color: this.#boardMaterial,
-                                side: THREE.DoubleSide,
-                                wireframe: false,
-                                transparent: true,
-                            }));
-                            frame.position.set(x*(this.#itemSize+2) - this.#board[y].length*(this.#itemSize/2) - (this.#itemSize/2)-1, y*(this.#itemSize+2) - this.#board[y].length*(this.#itemSize/2), 0)
-                            this.gameObject.add(frame)
-                        }
-                        else if(x!=0 && y!=0 && x!= this.#board[y].length-1){
-                            const horizontalFrame = new THREE.Mesh(this.#frameHorizontalGeometry, new THREE.MeshBasicMaterial({
-                                color: this.#boardMaterial,
-                                side: THREE.DoubleSide,
-                                wireframe: false,
-                                transparent: true,
-                            }));
-                            horizontalFrame.position.set(x*(this.#itemSize+2) - this.#board[y].length*(this.#itemSize/2), y*(this.#itemSize+2) - this.#board[y].length*(this.#itemSize/2)-(this.#itemSize/2)-1, 0)
-                            this.gameObject.add(horizontalFrame)
-                        }
-                        this.#tiles.push(null)
-                        continue;
+                if(y==0 || y==this.#board.length-1 || x==0 || x==this.#board[y].length-1)
+                {
+                    this.#tiles.push(null)
+                    continue
                 }
-                //board item
-                const cube = new BoardItem(material, this.#itemSize)
-                cube.position.set(x*(this.#itemSize+2) - this.#board[y].length*(this.#itemSize/2), y*(this.#itemSize+2) - this.#board[y].length*(this.#itemSize/2), 0)
+                const cube = new BoardItem(this.#itemMaterial, this.#itemSize, x-1, y-1)
+                cube.position.set(x*(this.#itemSize) - (this.#board[y].length-1)*(this.#itemSize/2), y*(this.#itemSize) - (this.#board[y].length-1)*(this.#itemSize/2), 0)
                 this.gameObject.add(cube)
+                if(this.#board[y][x]==-1){
+                    this.#tiles.push(null)
+                    continue
+                }
                 this.#tiles.push(cube)
-                //board frame
-                const frame = new THREE.Mesh(this.#frameVerticalGeometry, new THREE.MeshBasicMaterial({
-                    color: this.#boardMaterial,
-                    side: THREE.DoubleSide,
-                    wireframe: false,
-                    transparent: true,
-                }));
-                frame.position.set(x*(this.#itemSize+2) - this.#board[y].length*(this.#itemSize/2) -(this.#itemSize/2)-1, y*(this.#itemSize+2) - this.#board[y].length*(this.#itemSize/2), 0)
-                this.gameObject.add(frame)
-                
-
-                const horizontalFrame = new THREE.Mesh(this.#frameHorizontalGeometry, new THREE.MeshBasicMaterial({
-                    color: this.#boardMaterial,
-                    side: THREE.DoubleSide,
-                    wireframe: false,
-                    transparent: true,
-                }));
-                horizontalFrame.position.set(x*(this.#itemSize+2) - this.#board[y].length*(this.#itemSize/2), y*(this.#itemSize+2) - this.#board[y].length*(this.#itemSize/2)-(this.#itemSize/2)-1, 0)
-                this.gameObject.add(horizontalFrame)
             }
         }
-        this.#generated = true
+        this.generateGems(gemsPositions)
+        window.addEventListener("keydown", (e) => this.#updateNavigation(e));
+    }
+
+    generateGems(gemsPositions){
+        gemsPositions.forEach(gemPosition => {
+            let gemTile = this.#tiles[gemPosition.y*1*(this.#board.length) + gemPosition.x*1]
+            gemTile.containsGem=true
+            const gem = new Gem()
+            this.gameObject.add(gem)
+            gem.position.set(gemTile.position.x, gemTile.position.y, 10)
+        });
     }
 
     #updateNavigation(e) {
-        if (this.#generated == false) return;
+        //if (this.#generated == false) return;
         //38 - arrow up
         if (e.keyCode == 38 && this.#board[this.#cursor[1]+1][this.#cursor[0]]!=-1) {
             this.#cursor[1]+=1
