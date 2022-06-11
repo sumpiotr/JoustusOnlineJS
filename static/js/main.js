@@ -116,10 +116,15 @@ socket.on("loginMessage", (message) => {
 //gems positions is table of {x: int, y:int} objects; myTurn is bolean
 socket.on("startGame", (myTurn, gemsPositions) => {
     //start game
-    console.log(myTurn, gemsPositions);
     uiManager.hideAll();
     board.generateBoard(gemsPositions);
+    
 });
+//this.#player.emit("drawCard", newCard.id, this.getCardByName(newCard.card), true);
+
+socket.on("drawCard", (id, card, cos)=>{
+    console.log(id, card, cos)
+})
 
 //Game init
 gameManager.initScene("myScene1");
@@ -129,6 +134,7 @@ gameManager.setCamera("mainCamera");
 gameManager.cameraFocusOnScene();
 
 gameManager.addToScene("board", board.gameObject);
+//gameManager.addToScene("myHand", )
 
 let card = new Card(0,0,1,'red', null);
 gameManager.addToScene("card", card);

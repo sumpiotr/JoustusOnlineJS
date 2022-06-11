@@ -15,16 +15,7 @@ class Board {
     #cursor = [3,3]
     #tiles = []
     #selected = null
-
-    #frameVerticalGeometry = new THREE.BoxGeometry(2, this.#itemSize, this.#itemSize);
-    #frameHorizontalGeometry = new THREE.BoxGeometry(this.#itemSize+4, 2, this.#itemSize);
     #itemMaterial = `../../assets/art/JoustusBoards/Joustus-3X3.png`;
-    #boardMaterial =new THREE.MeshBasicMaterial({
-        color: 0x5c422a,
-        side: THREE.DoubleSide,
-        wireframe: false,
-        transparent: true,
-    })
 
     constructor(){
         this.gameObject = new THREE.Object3D()
@@ -86,7 +77,6 @@ class Board {
         }
     }
 
-    //to delete and replace with tile class object method
     #updateTile() {
         if (this.#selected != null) this.#selected.changeColorToOrigin();
         this.#selected = this.#tiles[this.#cursor[1] * this.#board.length + this.#cursor[0]];
