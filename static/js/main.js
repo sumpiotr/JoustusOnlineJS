@@ -2,6 +2,7 @@ import { uiManager } from "./Ui/UiManager.js";
 import { gameManager } from "./Game/GameManager.js";
 import { board } from "./Game/Board.js";
 import { DeckEditor } from "./DeckEditor.js";
+import { hintManager, hintTypes } from "./Game/HintManager.js";
 import Card from "./Game/Card.js";
 import { myHand, enemyHand } from "./Game/Hand.js";
 
