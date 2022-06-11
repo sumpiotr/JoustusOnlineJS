@@ -4,8 +4,8 @@ class Card extends THREE.Mesh{
         const tex = new THREE.ImageUtils.loadTexture('../../assets/art/JoustusCards/Joustus_1.png');
         tex.repeat.x = 510 / 2550;
         tex.repeat.y = 510 / 3056;
-        tex.offset.x = 1* tex.repeat.x;
-        tex.offset.y = 0* tex.repeat.y;
+        tex.offset.x = 0* tex.repeat.x;
+        tex.offset.y = (5-0)* tex.repeat.y;
 
         let material = new THREE.MeshBasicMaterial({
             side: THREE.DoubleSide,
@@ -15,6 +15,7 @@ class Card extends THREE.Mesh{
             map:tex
         })
         super(geometry, material)
+        this.color = this.color
     }
 }
 
