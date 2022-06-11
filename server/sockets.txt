@@ -1,0 +1,30 @@
+//data {value: bolean, message: str}
+socket.on("canPlaceCard", (data)=>{ 
+
+})
+
+socket.on("unselectCard", ()=>{
+    //if player have any card selected unselect it and return it to hand
+})
+
+//position - {x: int, y: int}
+//cardId - id in hand
+//direction - enum, .none if not pushing
+
+socket.emit("canPlaceCard", cardId, position, direction)
+
+socket.emit("placeCard", cardId, position, direction)
+
+
+//my - bool, is from my hand
+
+socket.on("placeCard", (cardId, position, direction, my)=>{
+    myTurn = !my
+})
+
+
+
+//cardData - single card object from cards.json  {"name": str ,"arrows": [int, int ,int, int],"offset": { "x": int, "y": int }}
+socket.on("drawCard", (cardId, cardData, my)=>{
+
+})

@@ -1,4 +1,6 @@
+const { Socket } = require("socket.io");
 const Deck = require("./Deck");
+const directions = require("./Enums/Directions");
 const defaultDeck = require("../data/defaultDecks.json").cards;
 const cards = require("../data/cards.json").cards;
 
@@ -62,6 +64,41 @@ module.exports = class Client {
 
         //#region game logic
 
+        this.#player.on("canPlaceCard", (cardId, position, direction) => {
+            if (cardId < 0 || cardId >= 3) {
+                this.#player.emit("canPlaceCard", { value: false, message: "Wrong id!" });
+                return;
+            }
+
+            let playDirection = this.room.game.isFieldEmpty(position) ? directions.none : direction;
+
+            this.#player.emit("canPlaceCard", this.room.game.canPlaceCard(this.getCardByName(this.#deck.hand[cardId]), position, playDirection));
+        });
+
+        this.#player.on("placeCard", (cardId, position, direction) => {
+            if (cardId < 0 || cardId >= 3 || this.firstPlayer != this.room.game.firstPlayerTurn) {
+                this.#player.emit("unselectCard");
+                return;
+            }
+            let playDirection = this.room.game.isFieldEmpty(position) ? directions.none : direction;
+
+            let placed = this.room.game.placeCard(this.getCardByName(this.#deck.hand[cardId]), position, playDirection);
+
+            if (placed) {
+                this.#deck.discardCard(cardId);
+                let newCard = this.#deck.drawCard();
+                //this.#player.emit("drawCard", this.getCardByName(newCard.card), newCard.id);
+
+                this.#player.emit("placeCard", cardId, position, direction, true);
+                this.room.getOppositePlayer(this.#player).emit("placeCard", cardId, position, direction, false);
+
+                this.#player.emit("drawCard", newCard.id, this.getCardByName(newCard.card), true);
+                this.room.getOppositePlayer(this.#player).emit("drawCard", newCard.id, this.getCardByName(newCard.card), false);
+            } else {
+                this.#player.emit("unselectCard");
+            }
+        });
+
         //#endregion
 
         //#region login
@@ -121,7 +158,7 @@ module.exports = class Client {
 
     joinRoom(room) {
         this.room = room;
-        if (room.join(this.#player)) {
+        if (room.join(this.#player, this)) {
             if (!room.waiting) {
                 this.firstPlayer = false;
                 let myTurn = this.firstPlayer == this.room.game.firstPlayerTurn;
@@ -129,9 +166,19 @@ module.exports = class Client {
 
                 this.room.game.gameStarted = true;
 
+                this.room.startGame();
+
                 this.#player.emit("startGame", myTurn, gems);
                 this.room.getOppositePlayer(this.#player).emit("startGame", !myTurn, gems);
             }
+        }
+    }
+
+    startGame() {
+        for (let i = 0; i < 3; i++) {
+            let newCard = this.#deck.drawCard();
+            this.#player.emit("drawCard", newCard.id, this.getCardByName(newCard.card), true);
+            this.room.getOppositePlayer(this.#player).emit("drawCard", newCard.id, this.getCardByName(newCard.card), false);
         }
     }
 
