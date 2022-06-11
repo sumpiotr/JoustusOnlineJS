@@ -120,7 +120,6 @@ socket.on("startGame", (myTurn, gemsPositions) => {
     uiManager.hideAll();
     board.generateBoard(gemsPositions);
 });
-//this.#player.emit("drawCard", newCard.id, this.getCardByName(newCard.card), true);
 
 socket.on("drawCard", (id, card, cos) => {
     console.log(id, card, cos);
