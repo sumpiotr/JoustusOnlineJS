@@ -89,8 +89,8 @@ module.exports = class Client {
                 let newCard = this.#deck.drawCard();
                 //this.#player.emit("drawCard", this.getCardByName(newCard.card), newCard.id);
 
-                this.#player.emit("placeCard", cardId, position, direction, true);
-                this.room.getOppositePlayer(this.#player).emit("placeCard", cardId, position, direction, false);
+                this.#player.emit("placeCard", cardId, position, playDirection, true);
+                this.room.getOppositePlayer(this.#player).emit("placeCard", cardId, position, playDirection, false);
 
                 this.#player.emit("drawCard", newCard.id, this.getCardByName(newCard.card), true);
                 this.room.getOppositePlayer(this.#player).emit("drawCard", newCard.id, this.getCardByName(newCard.card), false);
