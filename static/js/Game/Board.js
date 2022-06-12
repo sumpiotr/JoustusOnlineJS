@@ -78,35 +78,30 @@ class Board {
         if (this.#active == false) return;
         //38 - arrow up
         if (e.keyCode == 38 && this.#board[this.#cursor[1] - 1][this.#cursor[0]] != -1) {
-            hintManager.hide();
             let oldCursor = this.#cursor;
             this.#cursor[1] -= 1;
             this.#updateTile(oldCursor, directions.up);
         }
         //40 - arrow down
         else if (e.keyCode == 40 && this.#board[this.#cursor[1] + 1][this.#cursor[0]] != -1) {
-            hintManager.hide();
             let oldCursor = this.#cursor;
             this.#cursor[1] += 1;
             this.#updateTile(oldCursor, directions.down);
         }
         //37 - arrow left
         else if (e.keyCode == 37 && this.#board[this.#cursor[1]][this.#cursor[0] - 1] != -1) {
-            hintManager.hide();
             let oldCursor = this.#cursor;
             this.#cursor[0] -= 1;
             this.#updateTile(oldCursor, directions.left);
         }
         //39 - arrow right
         else if (e.keyCode == 39 && this.#board[this.#cursor[1]][this.#cursor[0] + 1] != -1) {
-            hintManager.hide();
             let oldCursor = this.#cursor;
             this.#cursor[0] += 1;
             this.#updateTile(oldCursor, directions.right);
         }
         //13 - enter
         else if (e.keyCode == 13) {
-            hintManager.hide();
             if (!this.getPlacedCardData()) {
                 this.#updateTile(this.#cursor, directions.none);
             } else {

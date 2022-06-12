@@ -141,6 +141,9 @@ socket.on("drawCard", (id, card, isMine) => {
 
 socket.on("canPlaceCard", (data) => {
     console.log(data.message);
+    if (data.message == "") {
+        hintManager.hide();
+    }
     if (data.value) {
         board.onEnter = (cardId, position, direction) => {
             socket.emit("placeCard", cardId, position, direction);
