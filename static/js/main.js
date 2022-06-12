@@ -158,6 +158,8 @@ socket.on("canPlaceCard", (data)=>{
         hintManager.hide();
     }
     if(data.value){
+        board.showingPreMove = true
+        board.showPreMove()
         board.onEnter = (cardId, position, direction)=>{socket.emit("placeCard", cardId, position, direction)}
     }
     else{
@@ -166,6 +168,7 @@ socket.on("canPlaceCard", (data)=>{
             hintManager.display(data.message, hintTypes.error);
         }
         board.onEnter = null
+        board.showingPreMove = false
     }
 });
 
