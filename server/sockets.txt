@@ -36,6 +36,6 @@ socket.on("drawCard", (cardId, cardData, my)=>{
 true - win
 false - lose
 
-socket.on("gameEnd", (winner)=>{
+socket.on("endGame", (winner)=>{
 
 })
