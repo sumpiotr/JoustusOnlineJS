@@ -22,17 +22,11 @@ class Board {
     #itemMaterial = `../../assets/art/JoustusBoards/Joustus-3X3.png`;
     #active = false;
 
-    constructor() {
-        this.gameObject = new THREE.Object3D();
-        this.getPlacedCardData = () => {
-            return null;
-        };
-        this.onMove = () => {
-            console.log("getPlacedData");
-        };
-        this.onEnter = () => {
-            console.log("getPlacedData");
-        };
+    constructor(){
+        this.gameObject = new THREE.Object3D()
+        this.getPlacedCardData = null
+        this.onMove = ()=>{return null}
+        this.onEnter = null
     }
 
     generateBoard(gemsPositions) {
@@ -66,12 +60,13 @@ class Board {
         });
     }
 
-    activate(card) {
-        this.#active = true;
-        this.#selectedCard = card;
-        this.gameObject.add(card);
-        const tileToPlace = this.#tiles[this.#cursor[1] * this.#board.length + this.#cursor[0]].position;
-        this.#selectedCard.position.set(tileToPlace.x, tileToPlace.y, 15);
+    activate(card){
+        this.#active = true
+        this.#selectedCard = card
+        this.gameObject.add(card)
+        const tileToPlace = this.#tiles[this.#cursor[1] * this.#board.length + this.#cursor[0]].position
+        this.#selectedCard.position.set(tileToPlace.x, tileToPlace.y, 15)
+        this.#updateTile(this.#cursor, directions.none);
     }
 
     #updateNavigation(e) {
@@ -101,16 +96,13 @@ class Board {
             this.#updateTile(oldCursor, directions.right);
         }
         //13 - enter
-        else if (e.keyCode == 13) {
-            if (!this.getPlacedCardData()) {
-                this.#updateTile(this.#cursor, directions.none);
-            } else {
-                let movedCard = this.getPlacedCardData();
-                console.log(movedCard);
-                this.#active = false;
-                this.#cards.push(this.#selectedCard);
-                this.onEnter(movedCard.cardId, movedCard.position, movedCard.direction);
-            }
+        else if(e.keyCode == 13){
+            if(!this.onEnter)return
+            let movedCard = this.getPlacedCardData()
+            console.log(movedCard)
+            this.#active = false
+            this.#cards.push(this.#selectedCard)
+            this.onEnter(movedCard.cardId, movedCard.position, movedCard.direction)
         }
     }
 
@@ -121,28 +113,39 @@ class Board {
             console.log(card);
             switch (direction) {
                 case directions.up:
-                    card.position.y = (position.y + 1) * 10 - 40;
-                    card.position.x = position.x * 10 - 40;
+                    card.position.y=(position.y)*10-30
+                    card.position.x=(position.x)*10-30
                     break;
                 case directions.right:
-                    card.position.y = position.y * 10 - 40;
-                    card.position.x = (position.x + 1) * 10 - 40;
+                    card.position.y=(position.y)*10-30
+                    card.position.x=(position.x)*10-30
                     break;
                 case directions.down:
-                    card.position.y = (position.y - 1) * 10 - 40;
-                    card.position.x = position.x * 10 - 40;
+                    card.position.y=(position.y)*10-30
+                    card.position.x=(position.x)*10-30
                     break;
                 case directions.left:
-                    card.position.y = position.y * 10 - 40;
-                    card.position.x = (position.x - 1) * 10 - 40;
+                    card.position.y=(position.y)*10-30
+                    card.position.x=(position.x)*10-30
                     break;
                 case directions.none:
-                    card.position.y = position.y * 10 - 40;
-                    card.position.x = position.x * 10 - 40;
+                    card.position.y=(position.y)*10-30
+                    card.position.x=(position.x)*10-30
                     break;
             }
             card.position.z = 15;
             this.gameObject.add(card);
+        }
+        else{
+            this.#cards.forEach(card => {
+                if(card._id == cardId){
+                    card.position.y=(position.y)*10-30
+                    card.position.x=(position.x)*10-30
+                    card.position.z=15
+                    this.gameObject.add(card)
+                    return
+                }
+            });
         }
     }
 

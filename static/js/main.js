@@ -139,23 +139,20 @@ socket.on("drawCard", (id, card, isMine) => {
     isMine ? myHand.addCard(card, id) : enemyHand.addCard(card, id);
 });
 
-socket.on("canPlaceCard", (data) => {
-    console.log(data.message);
+socket.on("canPlaceCard", (data)=>{ 
+    console.log(data.value, data.message)
     if (data.message == "") {
         hintManager.hide();
     }
-    if (data.value) {
-        board.onEnter = (cardId, position, direction) => {
-            socket.emit("placeCard", cardId, position, direction);
-        };
-    } else {
+    if(data.value){
+        board.onEnter = (cardId, position, direction)=>{socket.emit("placeCard", cardId, position, direction)}
+    }
+    else{
         if (data.message != "") {
             console.log("display");
             hintManager.display(data.message, hintTypes.error);
         }
-        board.onEnter = () => {
-            console.log("getPlacedData");
-        };
+        board.onEnter = null
     }
 });
 
