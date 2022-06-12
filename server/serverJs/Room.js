@@ -34,4 +34,9 @@ module.exports = class Room {
         const oppositePlayer = this.#players[0] == player ? this.#players[1] : this.#players[0];
         return oppositePlayer;
     }
+
+    getOppositeClient(client) {
+        const oppositeClient = this.#clients[0] == client ? this.#clients[1] : this.#clients[0];
+        return oppositeClient;
+    }
 };

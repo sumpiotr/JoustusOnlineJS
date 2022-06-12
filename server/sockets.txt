@@ -28,3 +28,14 @@ socket.on("placeCard", (cardId, position, direction, my)=>{
 socket.on("drawCard", (cardId, cardData, my)=>{
 
 })
+
+
+
+//winner:
+0 - draw
+true - win
+false - lose
+
+socket.on("gameEnd", (winner)=>{
+
+})

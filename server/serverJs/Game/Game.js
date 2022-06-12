@@ -72,7 +72,7 @@ module.exports = class Game {
 
     //#region cards
 
-    placeCard(card, position, direction) {
+    placeCard(card, position, direction, firstPlayer) {
         if (!this.canPlaceCard(card, position, direction)) return false;
 
         this.firstPlayerTurn = !this.firstPlayerTurn;
@@ -80,7 +80,7 @@ module.exports = class Game {
         let field = this.#board[position.y][position.x];
 
         if (direction == directions.none || field.card == null) {
-            field.card = new Card(card, position);
+            field.card = new Card(card, position, firstPlayer);
             return true;
         }
 
@@ -204,6 +204,26 @@ module.exports = class Game {
             }
         }
         return true;
+    }
+
+    // 0 - draw, 1 - firstPlayer win, -1 - second player win
+    getWinner() {
+        let firstPlayerScore = 0;
+        let secondPlayerScore = 0;
+
+        for (let y of this.#board) {
+            for (let x of this.#board[y]) {
+                let field = this.#board[y][x];
+                if (field.gem && field.card != null) {
+                    if (field.card.firstPlayer) firstPlayerScore++;
+                    else secondPlayerScore++;
+                }
+            }
+        }
+
+        if (firstPlayerScore == secondPlayerScore) return 0;
+        else if (firstPlayerScore > secondPlayerScore) return 1;
+        else return -1;
     }
 
     #getRandomInt(min, max) {

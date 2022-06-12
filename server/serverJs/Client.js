@@ -1,4 +1,3 @@
-const { Socket } = require("socket.io");
 const Deck = require("./Deck");
 const directions = require("./Enums/Directions");
 const defaultDeck = require("../data/defaultDecks.json").cards;
@@ -82,7 +81,7 @@ module.exports = class Client {
             }
             let playDirection = this.room.game.isFieldEmpty(position) ? directions.none : direction;
 
-            let placed = this.room.game.placeCard(this.getCardByName(this.#deck.hand[cardId]), position, playDirection);
+            let placed = this.room.game.placeCard(this.getCardByName(this.#deck.hand[cardId]), position, playDirection, this.firstPlayer);
 
             if (placed) {
                 this.#deck.discardCard(cardId);
@@ -94,6 +93,9 @@ module.exports = class Client {
 
                 this.#player.emit("drawCard", newCard.id, this.getCardByName(newCard.card), true);
                 this.room.getOppositePlayer(this.#player).emit("drawCard", newCard.id, this.getCardByName(newCard.card), false);
+
+                let oppositeClient = this.room.getOppositeClient();
+                oppositeClient.checkGameEnd();
             } else {
                 this.#player.emit("unselectCard");
             }
@@ -179,6 +181,21 @@ module.exports = class Client {
             let newCard = this.#deck.drawCard();
             this.#player.emit("drawCard", newCard.id, this.getCardByName(newCard.card), true);
             this.room.getOppositePlayer(this.#player).emit("drawCard", newCard.id, this.getCardByName(newCard.card), false);
+        }
+    }
+
+    checkGameEnd() {
+        if (this.room.game.isGameEnd(this.#deck.hand)) {
+            let winner = this.room.game.getWinner();
+            if (winner == 0) {
+                this.#player.emit("endGame", 0);
+                this.room.getOppositePlayer(this.#player).emit("endGame", 0);
+                return;
+            }
+
+            let win = (this.firstPlayer && winner == 1) || (!this.firstPlayer && winner == -1);
+            this.#player.emit("endGame", win);
+            this.room.getOppositePlayer(this.#player).emit("endGame", !win);
         }
     }
 
