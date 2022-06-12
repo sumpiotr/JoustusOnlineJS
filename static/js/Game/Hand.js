@@ -4,7 +4,7 @@ class Hand {
     #cursor = 1;
     #selected = null;
     #name = "";
-    #active = false;
+    
     #onEnter = () => {
         console.log("enter pressed");
     };
@@ -13,6 +13,7 @@ class Hand {
         this.gameObject = new THREE.Object3D();
         this.#name = name;
         this.cards = [null, null, null];
+        this.active = false;
     }
 
     generateHand() {
@@ -44,13 +45,13 @@ class Hand {
     }
 
     activate(onEnter) {
-        this.#active = true;
+        this.active = true;
         console.log("my turn");
         this.#onEnter = onEnter;
     }
 
     #updateNavigation(e) {
-        if (this.#active == false || this.#name == "enemy") return;
+        if (this.active == false || this.#name == "enemy") return;
         //38 - arrow up
         if (e.keyCode == 38 && this.#cursor - 1 > -1) {
             this.#cursor -= 1;
@@ -69,7 +70,7 @@ class Hand {
 
     #placeCard() {
         this.#selected.changeColorToOrigin();
-        this.#active = false;
+        this.active = false;
         this.gameObject.remove(this.#selected);
         this.#onEnter(this.#selected);
     }

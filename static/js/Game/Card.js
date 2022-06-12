@@ -20,6 +20,9 @@ class Card extends THREE.Mesh{
         this.color = color
         this.directions = directions
         this._id = id
+        this.offsetX = offsetX
+        this.offsetY = offsetY
+        this.sheet = sheet
     }
 
     //uses hex
