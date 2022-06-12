@@ -107,6 +107,7 @@ module.exports = class Game {
             console.error("wrong position data at canPlaceCard (74) in Game.js");
             return { value: false, message: "wrong position" };
         }
+
         if (position.x < 0 || position.x >= this.#board[position.y].length) {
             console.error("wrong position data at canPlaceCard (74) in Game.js");
             return { value: false, message: "wrong position" };
@@ -129,7 +130,7 @@ module.exports = class Game {
 
         if (field.card.arrows[this.#getOpositeDirection(direction)] < card.arrows[direction]) {
             let directionVector = this.#getDirectionVector(direction);
-            let nextFieldPosition = { x: position.x + directionVector.x, y: position.y + directionVector.y };
+            let nextFieldPosition = { x: position.x * 1 + directionVector.x, y: position.y * 1 + directionVector.y };
             return this.canPlaceCard(card, nextFieldPosition, direction);
         } else {
             return { value: false, message: "You cant push card with greater arrow!" };
@@ -182,14 +183,26 @@ module.exports = class Game {
     //#endregion
 
     isGameEnd(hand) {
+        // for (let y in this.#board) {
+        //     for (let x in this.#board[y]) {
+        //         let field = this.#board[y][x];
+        //         if (field.card == null && field.type == fieldType.normal) {
+        //             return false;
+        //         }
+        //     }
+        // }
+
+        let gameEnd = true;
         for (let y in this.#board) {
             for (let x in this.#board[y]) {
                 let field = this.#board[y][x];
-                if (field.card == null && field.type == fieldType.normal && !field.gem) {
-                    return false;
+                if (field.card == null && field.type == fieldType.normal) {
+                    gameEnd = false;
+                    break;
                 }
             }
         }
+        if (gameEnd) return true;
 
         for (let y in this.#board) {
             for (let x in this.#board[y]) {
@@ -197,7 +210,7 @@ module.exports = class Game {
                 if (field.card != null && field.type == fieldType.normal) {
                     for (let handCard of hand) {
                         for (let direction = 0; direction < 3; direction++) {
-                            if (this.canPlaceCard(handCard, field.position, direction)) return false;
+                            if (this.canPlaceCard(handCard, { x: field.position.x, y: field.position.y }, direction)) return false;
                         }
                     }
                 }
