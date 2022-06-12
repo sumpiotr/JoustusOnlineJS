@@ -22,11 +22,13 @@ class Board {
     #itemMaterial = `../../assets/art/JoustusBoards/Joustus-3X3.png`;
     #active = false;
 
-    constructor(){
-        this.gameObject = new THREE.Object3D()
-        this.getPlacedCardData = null
-        this.onMove = ()=>{return null}
-        this.onEnter = null
+    constructor() {
+        this.gameObject = new THREE.Object3D();
+        this.getPlacedCardData = null;
+        this.onMove = () => {
+            return null;
+        };
+        this.onEnter = null;
     }
 
     generateBoard(gemsPositions) {
@@ -60,12 +62,12 @@ class Board {
         });
     }
 
-    activate(card){
-        this.#active = true
-        this.#selectedCard = card
-        this.gameObject.add(card)
-        const tileToPlace = this.#tiles[this.#cursor[1] * this.#board.length + this.#cursor[0]].position
-        this.#selectedCard.position.set(tileToPlace.x, tileToPlace.y, 15)
+    activate(card) {
+        this.#active = true;
+        this.#selectedCard = card;
+        this.gameObject.add(card);
+        const tileToPlace = this.#tiles[this.#cursor[1] * this.#board.length + this.#cursor[0]].position;
+        this.#selectedCard.position.set(tileToPlace.x, tileToPlace.y, 15);
         this.#updateTile(this.#cursor, directions.none);
     }
 
@@ -96,124 +98,128 @@ class Board {
             this.#updateTile(oldCursor, directions.right);
         }
         //13 - enter
-        else if(e.keyCode == 13){
-            if(!this.onEnter)return
-            let movedCard = this.getPlacedCardData()
-            console.log(movedCard)
-            this.#active = false
-            this.#cards.push(this.#selectedCard)
+        else if (e.keyCode == 13) {
+            if (!this.onEnter) return;
+            let movedCard = this.getPlacedCardData();
+            console.log(movedCard);
+            this.#active = false;
+            this.#cards.push(this.#selectedCard);
             let directionVector = this.#getDirectionVector(movedCard.direction);
-            this.#tiles[(movedCard.position.y-directionVector.y)*this.#board.length + movedCard.position.x-directionVector.x].card = this.#selectedCard
-            console.log(this.#tiles[(movedCard.position.y)*this.#board.length + movedCard.position.x])
-            this.onEnter(movedCard.cardId, movedCard.position, movedCard.direction)
+            //this.#tiles[(movedCard.position.y - directionVector.y) * this.#board.length + movedCard.position.x - directionVector.x].card = this.#selectedCard;
+            console.log(this.#tiles[movedCard.position.y * this.#board.length + movedCard.position.x]);
+            this.onEnter(movedCard.cardId, movedCard.position, movedCard.direction);
         }
     }
 
     placeCard(cardId, position, direction, isMine) {
-        this.#placeCard(cardId, position, direction, isMine)
+        this.#placeCard(cardId, position, direction, isMine);
     }
 
     #placeCard(cardId, position, direction, isMine) {
-        
         let directionVector = this.#getDirectionVector(direction);
-        let field = this.#tiles[(position.y-directionVector.y)*this.#board.length + position.x-directionVector.x]
-        
+        let field = this.#tiles[position.y * this.#board.length + position.x];
 
-        if(!isMine){
-            console.log('enemy')
-            console.log(direction, (position.y-directionVector.y)*this.#board.length + position.x-directionVector.x)
-            const card = enemyHand.takeCard(cardId);
-            card.position.y=(this.#board.length - position.y-directionVector.y-1)*10-30
-            card.position.x=(position.x-directionVector.x)*10-30
-            card.position.z = 15;
-            this.#cards.push(card)
-            this.gameObject.add(card);
-            console.log(card)
-            console.log(field.card)
-            field.card = card
-            console.log(field.card)
-            console.log(JSON.stringify(field))
+        // if (!isMine) {
+        //     const card = enemyHand.takeCard(cardId);
+        //     card.position.y = (this.#board.length - position.y - directionVector.y - 1) * 10 - 30;
+        //     card.position.x = (position.x - directionVector.x) * 10 - 30;
+        //     card.position.z = 15;
+        //     this.#cards.push(card);
+        //     this.gameObject.add(card);
+        //     field.card = card;
+        // }
+
+        let firstCard = this.#selectedCard;
+
+        if (!isMine) {
+            firstCard = enemyHand.takeCard(cardId);
+            firstCard.position.y = field.position.y;
+            firstCard.position.x = field.position.x;
+            firstCard.position.z = 15;
+            this.#cards.push(firstCard);
+            this.gameObject.add(firstCard);
         }
 
-        if (direction == directions.none) return
+        if (direction == directions.none) {
+            field.card = firstCard;
+            return;
+        }
 
-        let nextField = null
-        let x = position.x-directionVector.x;
-        let y = position.y-directionVector.y
+        let nextField = null;
+        let x = position.x;
+        let y = position.y;
         let fields = [];
-
 
         fields.push(field);
 
-        console.log('before dowhile')
+        console.log("before dowhile");
 
         do {
-            console.log('while')
-            console.log(directionVector)
+            console.log("while");
+            console.log(directionVector);
             let nextFieldPosition = { x: x + directionVector.x, y: y + directionVector.y };
-            x = nextFieldPosition.x
-            y = nextFieldPosition.y
-            console.log(nextFieldPosition.y*this.#board.length + nextFieldPosition.x)
-            nextField = this.#tiles[nextFieldPosition.y*this.#board.length + nextFieldPosition.x]
+            x = nextFieldPosition.x;
+            y = nextFieldPosition.y;
+            console.log(nextFieldPosition.y * this.#board.length + nextFieldPosition.x);
+            nextField = this.#tiles[nextFieldPosition.y * this.#board.length + nextFieldPosition.x];
             fields.push(nextField);
         } while (nextField.card != null);
 
+        console.log(field);
+        console.log(this.#tiles);
+        console.log(fields);
 
-        console.log(field)
-        console.log(this.#tiles)
-        console.log(fields)
-
-        for (let i = 0; i < fields.length-1; i++) {
-            const card = fields[i].card
-            console.log(card)
-            card.position.y =  fields[i+1].position.y
-            card.position.x = fields[i+1].position.x
+        for (let i = fields.length - 1; i >= 0; i--) {
+            let card = null;
+            if (i > 0) {
+                card = fields[i - 1].card;
+            } else {
+                card = isMine ? this.#selectedCard : firstCard;
+                console.log(cardId);
+            }
+            console.log(card);
+            card.position.y = fields[i].position.y;
+            card.position.x = fields[i].position.x;
             card.position.z = 15;
+            fields[i].card = card;
             //this.#move(fields[i+1].position, card)
         }
-        console.log(fields)
-        for(let j = fields.length-1; j > 0; j--)
-        {
-            fields[j].card = fields[j-1].card
-        }
-        fields[0].card=null
-        let toLog = []
-        fields.forEach(f => {
-            if(f.card)toLog.push(f)
-        });
-        console.log(toLog)
     }
 
-    #move(to, card){
+    #move(to, card) {
         new TWEEN.Tween(card.position) // co
-        .to({ x: to.x, y: to.y }, 500 ) // do jakiej pozycji, w jakim czasie
-        .repeat(0) // liczba powtórzeń
-        .easing(TWEEN.Easing.Bounce.Out) // typ easingu (zmiana w czasie)
-        .onUpdate(() => { console.log('update') })
-        .onComplete(() => { console.log ("koniec animacji") }) // funkcja po zakończeniu animacji
-        .start()
+            .to({ x: to.x, y: to.y }, 500) // do jakiej pozycji, w jakim czasie
+            .repeat(0) // liczba powtórzeń
+            .easing(TWEEN.Easing.Bounce.Out) // typ easingu (zmiana w czasie)
+            .onUpdate(() => {
+                console.log("update");
+            })
+            .onComplete(() => {
+                console.log("koniec animacji");
+            }) // funkcja po zakończeniu animacji
+            .start();
     }
 
-    #getDirectionVector(direction){
-        let vector = {x: 0, y:0}
-        switch(direction){
+    #getDirectionVector(direction) {
+        let vector = { x: 0, y: 0 };
+        switch (direction) {
             case directions.up:
-                    vector = {x: 0, y:-1}
-                    break;
-                case directions.right:
-                    vector = {x: 1, y:0}
-                    break;
-                case directions.down:
-                    vector = {x: 0, y:1}
-                    break;
-                case directions.left:
-                    vector = {x: -1, y:0}
-                    break;
-                default:
-                    vector = { x: 0, y: 0 };
-                    break;
+                vector = { x: 0, y: -1 };
+                break;
+            case directions.right:
+                vector = { x: 1, y: 0 };
+                break;
+            case directions.down:
+                vector = { x: 0, y: 1 };
+                break;
+            case directions.left:
+                vector = { x: -1, y: 0 };
+                break;
+            default:
+                vector = { x: 0, y: 0 };
+                break;
         }
-        return vector
+        return vector;
     }
 
     #updateTile(from, direction) {
