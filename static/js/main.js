@@ -6,6 +6,7 @@ import { hintManager, hintTypes } from "./Game/HintManager.js";
 import Card from "./Game/Card.js";
 import { myHand, enemyHand } from "./Game/Hand.js";
 import { directions } from "./Enums/Directions.js";
+import { turnManager } from "./Game/TurnManager.js";
 
 const socket = io();
 
@@ -142,6 +143,8 @@ socket.on("startGame", (myTurn, gemsPositions) => {
     };
     myHand.generateHand();
     enemyHand.generateHand();
+    turnManager.display();
+    turnManager.changeTurn(myTurn);
     if (myTurn)
         myHand.activate((card) => {
             board.activate(card);
@@ -152,8 +155,8 @@ socket.on("drawCard", (id, card, isMine) => {
     isMine ? myHand.addCard(card, id) : enemyHand.addCard(card, id);
 });
 
-socket.on("canPlaceCard", (data)=>{ 
-    console.log(data.value, data.message)
+socket.on("canPlaceCard", (data) => {
+    console.log(data.value, data.message);
     if (data.message == "") {
         hintManager.hide();
     }
@@ -174,6 +177,7 @@ socket.on("canPlaceCard", (data)=>{
 
 socket.on("placeCard", (cardId, position, direction, my) => {
     board.placeCard(cardId, position, direction, my);
+    turnManager.changeTurn(!my);
     if (!my) {
         myHand.activate((card) => {
             board.activate(card);

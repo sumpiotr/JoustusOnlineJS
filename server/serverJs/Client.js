@@ -185,7 +185,11 @@ module.exports = class Client {
     }
 
     checkGameEnd() {
-        if (this.room.game.isGameEnd(this.#deck.hand)) {
+        let hand = [];
+        for (let cardName of this.#deck.hand) {
+            hand.push(this.getCardByName(cardName));
+        }
+        if (this.room.game.isGameEnd(hand)) {
             let winner = this.room.game.getWinner();
             if (winner == 0) {
                 this.#player.emit("endGame", 0);

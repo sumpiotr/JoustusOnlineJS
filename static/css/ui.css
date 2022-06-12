@@ -202,3 +202,25 @@ div[selectable="button"] button {
     align-items: center;
     justify-content: center;
 }
+
+#turn {
+    display: none;
+    position: absolute;
+    top: 0;
+    bottom: 95%;
+    left: 0;
+    right: 90%;
+    border: 0.5vh solid orange;
+    border-bottom-right-radius: 10px;
+}
+
+#turnText {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    background-color: rgba(64, 63, 63, 0.5);
+    font-size: 1vw;
+}
