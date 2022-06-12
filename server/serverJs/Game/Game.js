@@ -182,8 +182,8 @@ module.exports = class Game {
     //#endregion
 
     isGameEnd(hand) {
-        for (let y of this.#board) {
-            for (let x of this.#board[y]) {
+        for (let y in this.#board) {
+            for (let x in this.#board[y]) {
                 let field = this.#board[y][x];
                 if (field.card == null && field.type == fieldType.normal && !field.gem) {
                     return false;
@@ -191,8 +191,8 @@ module.exports = class Game {
             }
         }
 
-        for (let y of this.#board) {
-            for (let x of this.#board[y]) {
+        for (let y in this.#board) {
+            for (let x in this.#board[y]) {
                 let field = this.#board[y][x];
                 if (field.card != null && field.type == fieldType.normal) {
                     for (let handCard of hand) {
@@ -211,8 +211,8 @@ module.exports = class Game {
         let firstPlayerScore = 0;
         let secondPlayerScore = 0;
 
-        for (let y of this.#board) {
-            for (let x of this.#board[y]) {
+        for (let y in this.#board) {
+            for (let x in this.#board[y]) {
                 let field = this.#board[y][x];
                 if (field.gem && field.card != null) {
                     if (field.card.firstPlayer) firstPlayerScore++;
