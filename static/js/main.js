@@ -116,6 +116,19 @@ socket.on("loginMessage", (message) => {
     loginInfo.textContent = message;
 });
 
+socket.on("gameEnd", (winner)=>{
+    board.deactivate()
+    if(winner===0){
+        hintManager.display('Remis!', hintTypes.normal);
+    }
+    else if(winner === false){
+        hintManager.display('Przegrałeś!', hintTypes.normal);
+    }
+    else{
+        hintManager.display('Wygrałeś!', hintTypes.normal);
+    }   
+})
+
 //gems positions is table of {x: int, y:int} objects; myTurn is bolean
 socket.on("startGame", (myTurn, gemsPositions) => {
     //start game

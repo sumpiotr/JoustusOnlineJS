@@ -71,6 +71,11 @@ class Board {
         this.#updateTile(this.#cursor, directions.none);
     }
 
+    deactivate(){
+        this.#active = false;
+        this.#selectedCard = null;
+    }
+
     #updateNavigation(e) {
         if (this.#active == false) return;
         //38 - arrow up
