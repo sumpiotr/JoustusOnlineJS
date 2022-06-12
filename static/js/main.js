@@ -139,10 +139,13 @@ socket.on("canPlaceCard", (data)=>{
     if(data.value){
         board.onEnter = (cardId, position, direction)=>{socket.emit("placeCard", cardId, position, direction)}
     }
+    else{
+        board.onEnter = ()=>{console.log('getPlacedData')}
+    }
 })
 
 socket.on("placeCard", (cardId, position, direction, my)=>{
-    board.placedCard(position, direction)
+    board.placeCard(cardId, position, direction, my)
     if(!my){
         myHand.activate((card)=>{board.activate(card)})
     }
