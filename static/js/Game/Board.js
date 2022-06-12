@@ -113,29 +113,32 @@ class Board {
     placeCard(cardId, position, direction, isMine){
         console.log(cardId, position, direction, isMine)
         if(!isMine){
-            const card = enemyHand.cards[cardId]
+            const card = enemyHand.takeCard(cardId)
+            console.log(card)
             switch(direction){
                 case directions.up:
-                    card.position.y=(position.y+1)*10
-                    card.position.x=(position.x)*10
+                    card.position.y=(position.y+1)*10-40
+                    card.position.x=(position.x)*10-40
                     break;
                 case directions.right:
-                    card.position.y=(position.y)*10
-                    card.position.x=(position.x+1)*10
+                    card.position.y=(position.y)*10-40
+                    card.position.x=(position.x+1)*10-40
                     break;
                 case directions.down:
-                    card.position.y=(position.y-1)*10
-                    card.position.x=(position.x)*10
+                    card.position.y=(position.y-1)*10-40
+                    card.position.x=(position.x)*10-40
                     break;
                 case directions.left:
-                    card.position.y=(position.y)*10
-                    card.position.x=(position.x-1)*10
+                    card.position.y=(position.y)*10-40
+                    card.position.x=(position.x-1)*10-40
                     break;
                 case directions.none:
-                    card.position.y=(position.y)*10
-                    card.position.x=(position.x)*10
+                    card.position.y=(position.y)*10-40
+                    card.position.x=(position.x)*10-40
                     break;
             }
+            card.position.z=15
+            this.gameObject.add(card)
         }
     }
 

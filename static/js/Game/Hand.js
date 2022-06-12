@@ -14,16 +14,28 @@ class Hand {
     }
 
     generateHand(){
+        this.refreshHand()
+        window.addEventListener("keydown", (e) => this.#updateNavigation(e));
+    }
+
+    refreshHand(){
         for(let i=0; i<this.cards.length; i++){
             if(this.cards[i] == null)continue;
             this.cards[i].position.set(0, -((150-24)/6)*(i+1)+42, 15)
         }
-        window.addEventListener("keydown", (e) => this.#updateNavigation(e));
     }
 
     addCard(card, index){
         this.cards[index]= this.#name=='player'?new Card(card.offset.x,card.offset.y, card.sheet, 'blue', card.directions, index):new Card(card.offset.x,card.offset.y, card.sheet, 'red', card.directions, index)
         this.gameObject.add(this.cards[index])
+        this.refreshHand()
+    }
+
+    takeCard(index){
+        const card = this.cards[index]
+        this.cards[index] = null
+        this.gameObject.remove(card)
+        return card
     }
 
     activate(onEnter){
