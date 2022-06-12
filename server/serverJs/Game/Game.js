@@ -180,6 +180,31 @@ module.exports = class Game {
 
     //#endregion
 
+    isGameEnd(hand) {
+        for (let y of this.#board) {
+            for (let x of this.#board[y]) {
+                let field = this.#board[y][x];
+                if (field.card == null && field.type == fieldType.normal && !field.gem) {
+                    return false;
+                }
+            }
+        }
+
+        for (let y of this.#board) {
+            for (let x of this.#board[y]) {
+                let field = this.#board[y][x];
+                if (field.card != null && field.type == fieldType.normal) {
+                    for (let handCard of hand) {
+                        for (let direction = 0; direction < 3; direction++) {
+                            if (this.canPlaceCard(handCard, field.position, direction)) return false;
+                        }
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
     #getRandomInt(min, max) {
         min = Math.ceil(min);
         max = Math.floor(max);

@@ -186,6 +186,7 @@ module.exports = class Client {
         for (let card of cards) {
             if (card.name == name) return card;
         }
+        console.error("There is not card named ", name);
         return null;
     }
 };

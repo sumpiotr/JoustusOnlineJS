@@ -39,6 +39,7 @@ const decksDb = new Datastore({
 const io = require("socket.io")(server);
 
 io.on("connection", (socket) => {
+    console.log("client connected");
     const client = new Client(socket, sqlite3, decksDb);
 
     socket.on("disconnect", () => {
