@@ -177,7 +177,7 @@ div[selectable="button"] button {
 }
 
 #hint {
-    display: flex;
+    display: none;
     justify-content: center;
     align-items: center;
     position: absolute;
@@ -198,7 +198,7 @@ div[selectable="button"] button {
     border: 1.5vh solid orange;
     border-bottom: none;
     font-size: 3vh;
-    display: none;
+    display: flex;
     align-items: center;
     justify-content: center;
 }

@@ -121,35 +121,49 @@ socket.on("startGame", (myTurn, gemsPositions) => {
     //start game
     uiManager.hideAll();
     board.generateBoard(gemsPositions);
-    board.onMove = (cardId, position, direction)=>{
-        socket.emit("canPlaceCard", cardId, position, direction)
-        board.getPlacedCardData = ()=>{return{cardId:cardId, position:position, direction:direction}}
-    }
-    myHand.generateHand()
-    enemyHand.generateHand()
-    if(myTurn)myHand.activate((card)=>{board.activate(card)})
+    board.onMove = (cardId, position, direction) => {
+        socket.emit("canPlaceCard", cardId, position, direction);
+        board.getPlacedCardData = () => {
+            return { cardId: cardId, position: position, direction: direction };
+        };
+    };
+    myHand.generateHand();
+    enemyHand.generateHand();
+    if (myTurn)
+        myHand.activate((card) => {
+            board.activate(card);
+        });
 });
 
-socket.on("drawCard", (id, card, isMine)=>{
-    isMine?myHand.addCard(card, id):enemyHand.addCard(card, id)
-})
+socket.on("drawCard", (id, card, isMine) => {
+    isMine ? myHand.addCard(card, id) : enemyHand.addCard(card, id);
+});
 
-socket.on("canPlaceCard", (data)=>{ 
-    console.log(data.message)
-    if(data.value){
-        board.onEnter = (cardId, position, direction)=>{socket.emit("placeCard", cardId, position, direction)}
+socket.on("canPlaceCard", (data) => {
+    console.log(data.message);
+    if (data.value) {
+        board.onEnter = (cardId, position, direction) => {
+            socket.emit("placeCard", cardId, position, direction);
+        };
+    } else {
+        if (data.message != "") {
+            console.log("display");
+            hintManager.display(data.message, hintTypes.error);
+        }
+        board.onEnter = () => {
+            console.log("getPlacedData");
+        };
     }
-    else{
-        board.onEnter = ()=>{console.log('getPlacedData')}
-    }
-})
+});
 
-socket.on("placeCard", (cardId, position, direction, my)=>{
-    board.placeCard(cardId, position, direction, my)
-    if(!my){
-        myHand.activate((card)=>{board.activate(card)})
+socket.on("placeCard", (cardId, position, direction, my) => {
+    board.placeCard(cardId, position, direction, my);
+    if (!my) {
+        myHand.activate((card) => {
+            board.activate(card);
+        });
     }
-})
+});
 
 //Game init
 gameManager.initScene("myScene1");
@@ -159,9 +173,9 @@ gameManager.setCamera("mainCamera");
 gameManager.cameraFocusOnScene();
 
 gameManager.addToScene("board", board.gameObject);
-gameManager.addToScene("myHand", myHand.gameObject)
-gameManager.addToScene('enemyHand', enemyHand.gameObject)
-myHand.gameObject.position.x = -45
-enemyHand.gameObject.position.x = 45
+gameManager.addToScene("myHand", myHand.gameObject);
+gameManager.addToScene("enemyHand", enemyHand.gameObject);
+myHand.gameObject.position.x = -45;
+enemyHand.gameObject.position.x = 45;
 
 gameManager.startRenderer();
