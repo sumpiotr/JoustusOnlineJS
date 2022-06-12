@@ -199,8 +199,8 @@ module.exports = class Client {
             }
 
             let win = (this.firstPlayer && winner == 1) || (!this.firstPlayer && winner == -1);
-            this.#player.emit("endGame", win);
-            this.room.getOppositePlayer(this.#player).emit("endGame", !win);
+            this.#player.emit("endGame", !win);
+            this.room.getOppositePlayer(this.#player).emit("endGame", win);
         }
     }
 
