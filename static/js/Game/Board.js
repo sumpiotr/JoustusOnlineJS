@@ -1,6 +1,7 @@
 import { directions } from "../Enums/Directions.js";
 import BoardItem from "./BoardItem.js"
 import Gem from "./Gem.js"
+import { enemyHand } from "./Hand.js";
 
 class Board {
     #itemSize = 10;
@@ -15,6 +16,7 @@ class Board {
     ]
     #cursor = [3,3]
     #tiles = []
+    #cards = []
     #selectedCard = null
     #itemMaterial = `../../assets/art/JoustusBoards/Joustus-3X3.png`;
     #active = false
@@ -100,9 +102,39 @@ class Board {
             else{
                 let movedCard = this.getPlacedCardData()
                 console.log(movedCard)
-                this.#active = true
+                this.#active = false
+                this.#cards.push(this.#selectedCard)
                 this.onEnter(movedCard.cardId, movedCard.position, movedCard.direction)
 
+            }
+        }
+    }
+
+    placeCard(cardId, position, direction, isMine){
+        console.log(cardId, position, direction, isMine)
+        if(!isMine){
+            const card = enemyHand.cards[cardId]
+            switch(direction){
+                case directions.up:
+                    card.position.y=(position.y+1)*10
+                    card.position.x=(position.x)*10
+                    break;
+                case directions.right:
+                    card.position.y=(position.y)*10
+                    card.position.x=(position.x+1)*10
+                    break;
+                case directions.down:
+                    card.position.y=(position.y-1)*10
+                    card.position.x=(position.x)*10
+                    break;
+                case directions.left:
+                    card.position.y=(position.y)*10
+                    card.position.x=(position.x-1)*10
+                    break;
+                case directions.none:
+                    card.position.y=(position.y)*10
+                    card.position.x=(position.x)*10
+                    break;
             }
         }
     }
