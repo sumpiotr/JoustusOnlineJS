@@ -91,7 +91,7 @@ module.exports = class Game {
 
         do {
             let directionVector = this.#getDirectionVector(direction);
-            let nextFieldPosition = { x: nextField.position.x + directionVector.x, y: nextField.position.y + directionVector.y };
+            let nextFieldPosition = { x: nextField.position.x * 1 + directionVector.x, y: nextField.position.y * 1 + directionVector.y };
             nextField = this.#board[nextFieldPosition.y][nextFieldPosition.x];
             fields.push(nextField);
         } while (nextField.card != null);
