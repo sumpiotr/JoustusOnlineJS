@@ -135,12 +135,12 @@ socket.on("drawCard", (id, card, isMine)=>{
 })
 
 socket.on("canPlaceCard", (data)=>{ 
-    console.log(data.message)
+    console.log(data.value, data.message)
     if(data.value){
         board.onEnter = (cardId, position, direction)=>{socket.emit("placeCard", cardId, position, direction)}
     }
     else{
-        board.onEnter = ()=>{console.log('getPlacedData')}
+        board.onEnter = null
     }
 })
 
