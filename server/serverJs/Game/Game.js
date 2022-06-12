@@ -74,6 +74,7 @@ module.exports = class Game {
 
     placeCard(card, position, direction) {
         if (!this.canPlaceCard(card, position, direction)) return false;
+
         this.firstPlayerTurn = !this.firstPlayerTurn;
 
         let field = this.#board[position.y][position.x];
@@ -91,7 +92,7 @@ module.exports = class Game {
         do {
             let directionVector = this.#getDirectionVector(direction);
             let nextFieldPosition = { x: position.x + directionVector.x, y: position.y + directionVector.y };
-            nextField = this.#board[position.y][position.x];
+            nextField = this.#board[nextFieldPosition.y][nextFieldPosition.x];
             fields.push(nextField);
         } while (nextField.card != null);
 
