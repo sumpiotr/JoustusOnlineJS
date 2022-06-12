@@ -14,6 +14,7 @@ class BoardItem extends THREE.Mesh{
         })
         super(geometry, material)
         this.containsGem = false
+        this.card = null
     }
 }
 
