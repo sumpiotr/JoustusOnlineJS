@@ -60,7 +60,7 @@ class Board {
             gemTile.containsGem = true;
             const gem = new Gem();
             this.gameObject.add(gem);
-            gem.position.set(gemTile.position.x, gemTile.position.y, 14);
+            gem.position.set(gemTile.position.x, gemTile.position.y, 16);
         });
     }
 
@@ -150,6 +150,7 @@ class Board {
         // }
 
         let firstCard = this.#selectedCard;
+        firstCard.position.z = 15
 
         if (!isMine) {
             firstCard = enemyHand.takeCard(cardId);
