@@ -48,6 +48,7 @@ class Hand {
         this.active = true;
         console.log("my turn");
         this.#onEnter = onEnter;
+        this.#selectCard();
     }
 
     #updateNavigation(e) {
@@ -73,6 +74,10 @@ class Hand {
         this.active = false;
         this.gameObject.remove(this.#selected);
         this.#onEnter(this.#selected);
+    }
+
+    selectCard(){
+        this.#selectCard()
     }
 
     #selectCard() {

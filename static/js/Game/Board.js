@@ -41,7 +41,7 @@ class Board {
                     continue;
                 }
                 const cube = new BoardItem(this.#itemMaterial, this.#itemSize, x - 1, y - 1);
-                cube.position.set(x * this.#itemSize - (this.#board[y].length - 1) * (this.#itemSize / 2), y * this.#itemSize - (this.#board[y].length - 1) * (this.#itemSize / 2), 0);
+                cube.position.set(x * this.#itemSize - (this.#board[y].length - 1) * (this.#itemSize / 2), y * this.#itemSize - (this.#board[y].length - 1) * (this.#itemSize / 2), 13);
                 this.gameObject.add(cube);
                 if (this.#board[y][x] == -1) {
                     this.#tiles.push(null);
@@ -60,7 +60,7 @@ class Board {
             gemTile.containsGem = true;
             const gem = new Gem();
             this.gameObject.add(gem);
-            gem.position.set(gemTile.position.x, gemTile.position.y, 10);
+            gem.position.set(gemTile.position.x, gemTile.position.y, 14);
         });
     }
 
@@ -128,6 +128,7 @@ class Board {
         this.#cursor = [3, 3]
         this.#active = false
         myHand.active = true
+        myHand.selectCard()
     }
 
     placeCard(cardId, position, direction, isMine) {

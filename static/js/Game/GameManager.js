@@ -9,7 +9,7 @@ class GameManager {
     constructor() {
         this.#renderer = new THREE.WebGLRenderer();
         document.getElementById("root").appendChild(this.#renderer.domElement);
-        this.#renderer.setClearColor(0x0066ff);
+        this.#renderer.setClearColor(0x7d8796);
         this.#renderer.setSize(window.innerWidth, window.innerHeight);
         window.addEventListener("resize", () => {
             this.#activeCamera.aspect = window.innerWidth / window.innerHeight;
