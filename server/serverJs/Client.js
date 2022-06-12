@@ -190,6 +190,7 @@ module.exports = class Client {
             hand.push(this.getCardByName(cardName));
         }
         if (this.room.game.isGameEnd(hand)) {
+            console.log("end");
             let winner = this.room.game.getWinner();
             if (winner == 0) {
                 this.#player.emit("endGame", 0);
