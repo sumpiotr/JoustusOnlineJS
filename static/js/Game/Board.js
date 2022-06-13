@@ -21,7 +21,7 @@ class Board {
     #selectedCard = null;
     #itemMaterial = `../../assets/art/JoustusBoards/Joustus-3X3.png`;
     #active = false;
-    #toReset = []
+    #toReset = [];
 
     constructor() {
         this.gameObject = new THREE.Object3D();
@@ -30,7 +30,7 @@ class Board {
             return null;
         };
         this.onEnter = null;
-        this.showingPreMove = false
+        this.showingPreMove = false;
     }
 
     generateBoard(gemsPositions) {
@@ -73,7 +73,7 @@ class Board {
         this.#updateTile(this.#cursor, directions.none);
     }
 
-    deactivate(){
+    deactivate() {
         this.#active = false;
         this.#selectedCard = null;
     }
@@ -113,7 +113,7 @@ class Board {
             let directionVector = this.#getDirectionVector(movedCard.direction);
             //this.#tiles[(movedCard.position.y - directionVector.y) * this.#board.length + movedCard.position.x - directionVector.x].card = this.#selectedCard;
             this.onEnter(movedCard.cardId, movedCard.position, movedCard.direction);
-            this.#toReset = []
+            this.#toReset = [];
         }
         //27 - esc
         else if (e.keyCode == 27) {
@@ -121,14 +121,17 @@ class Board {
         }
     }
 
-    cancel(){
-        myHand.addCard({offset:{x:this.#selectedCard.offsetX, y:this.#selectedCard.offsetY}, sheet:this.#selectedCard.sheet, directions:this.#selectedCard.directions}, this.#selectedCard._id)
-        this.gameObject.remove(this.#selectedCard)
-        this.#selectedCard = null
-        this.#cursor = [3, 3]
-        this.#active = false
-        myHand.active = true
-        myHand.selectCard()
+    cancel() {
+        myHand.addCard(
+            { offset: { x: this.#selectedCard.offsetX, y: this.#selectedCard.offsetY }, sheet: this.#selectedCard.sheet, directions: this.#selectedCard.directions },
+            this.#selectedCard._id
+        );
+        this.gameObject.remove(this.#selectedCard);
+        this.#selectedCard = null;
+        this.#cursor = [3, 3];
+        this.#active = false;
+        myHand.active = true;
+        myHand.selectCard();
     }
 
     placeCard(cardId, position, direction, isMine) {
@@ -150,7 +153,6 @@ class Board {
         // }
 
         let firstCard = this.#selectedCard;
-        firstCard.position.z = 15
 
         if (!isMine) {
             firstCard = enemyHand.takeCard(cardId);
@@ -163,6 +165,7 @@ class Board {
 
         if (direction == directions.none) {
             field.card = firstCard;
+            firstCard.position.z = 15;
             return;
         }
 
@@ -172,7 +175,6 @@ class Board {
         let fields = [];
 
         fields.push(field);
-
 
         do {
             let nextFieldPosition = { x: x + directionVector.x, y: y + directionVector.y };
@@ -202,36 +204,34 @@ class Board {
             .to({ x: to.x, y: to.y }, 500) // do jakiej pozycji, w jakim czasie
             .repeat(0) // liczba powtórzeń
             .easing(TWEEN.Easing.Bounce.Out) // typ easingu (zmiana w czasie)
-            .onUpdate(() => {
-            })
-            .onComplete(() => {
-            }) // funkcja po zakończeniu animacji
+            .onUpdate(() => {})
+            .onComplete(() => {}) // funkcja po zakończeniu animacji
             .start();
     }
 
-    resetPreMove(){
-        this.#toReset.forEach(element=>{
-            if(element.card==this.#selectedCard)return
-            element.card.position.set(element.field.position.x, element.field.position.y, 15)
-        })
-        this.#toReset = []
-        this.showingPreMove = false
+    resetPreMove() {
+        this.#toReset.forEach((element) => {
+            if (element.card == this.#selectedCard) return;
+            element.card.position.set(element.field.position.x, element.field.position.y, 15);
+        });
+        this.#toReset = [];
+        this.showingPreMove = false;
     }
 
     showPreMove() {
-        if(!this.showingPreMove)return
-        let data = this.getPlacedCardData()
-        let cardId = data.id
-        let position = {x: data.position.x, y: data.position.y}
-        let direction = data.direction
-        let isMine = true
+        if (!this.showingPreMove) return;
+        let data = this.getPlacedCardData();
+        let cardId = data.id;
+        let position = { x: data.position.x, y: data.position.y };
+        let direction = data.direction;
+        let isMine = true;
 
-        if(direction==directions.none)return
+        if (direction == directions.none) return;
 
         let directionVector = this.#getDirectionVector(direction);
         let field = this.#tiles[position.y * this.#board.length + position.x];
 
-        if(!field.card)return
+        if (!field.card) return;
 
         // if (!isMine) {
         //     const card = enemyHand.takeCard(cardId);
@@ -274,24 +274,23 @@ class Board {
             fields.push(nextField);
         } while (nextField.card != null);
 
-        if(fields[0])
-
-        for (let i = fields.length - 1; i >= 0; i--) {
-            let card = null;
-            if (i > 0) {
-                card = fields[i - 1].card;
-            } else {
-                card = isMine ? this.#selectedCard : firstCard;
+        if (fields[0])
+            for (let i = fields.length - 1; i >= 0; i--) {
+                let card = null;
+                if (i > 0) {
+                    card = fields[i - 1].card;
+                } else {
+                    card = isMine ? this.#selectedCard : firstCard;
+                }
+                if (!card) return;
+                card.position.y = fields[i].position.y;
+                card.position.x = fields[i].position.x;
+                card.position.z = 15;
+                //fields[i].card = card;
+                this.#toReset.push({ field: fields[i - 1], card: card });
+                //this.#move(fields[i+1].position, card)
             }
-            if(!card)return
-            card.position.y = fields[i].position.y;
-            card.position.x = fields[i].position.x;
-            card.position.z = 15;
-            //fields[i].card = card;
-            this.#toReset.push({field:fields[i-1], card:card})
-            //this.#move(fields[i+1].position, card)
-        }
-        this.showingPreMove = false
+        this.showingPreMove = false;
     }
 
     #getDirectionVector(direction) {
@@ -317,8 +316,8 @@ class Board {
     }
 
     #updateTile(from, direction) {
-        if(this.direction == directions.none)this.showingPreMove==false
-        this.resetPreMove()
+        if (this.direction == directions.none) this.showingPreMove == false;
+        this.resetPreMove();
         const tileToPlace = this.#tiles[this.#cursor[1] * this.#board.length + this.#cursor[0]];
         this.#selectedCard.position.set(tileToPlace.position.x, tileToPlace.position.y, 16);
         this.getPlacedCardData = () => {
