@@ -126,6 +126,7 @@ class Board {
             { offset: { x: this.#selectedCard.offsetX, y: this.#selectedCard.offsetY }, sheet: this.#selectedCard.sheet, directions: this.#selectedCard.directions },
             this.#selectedCard._id
         );
+        this.resetPreMove()
         this.gameObject.remove(this.#selectedCard);
         this.#selectedCard = null;
         this.#cursor = [3, 3];
