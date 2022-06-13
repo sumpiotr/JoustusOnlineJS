@@ -190,8 +190,8 @@ module.exports = class Client {
             hand.push(this.getCardByName(cardName));
         }
         if (this.room.game.isGameEnd(hand)) {
-            console.log("end");
             let winner = this.room.game.getWinner();
+            console.log(winner);
             if (winner == 0) {
                 this.#player.emit("endGame", 0);
                 this.room.getOppositePlayer(this.#player).emit("endGame", 0);
@@ -199,8 +199,9 @@ module.exports = class Client {
             }
 
             let win = (this.firstPlayer && winner == 1) || (!this.firstPlayer && winner == -1);
-            this.#player.emit("endGame", !win);
-            this.room.getOppositePlayer(this.#player).emit("endGame", win);
+            console.log(win, this.firstPlayer);
+            this.#player.emit("endGame", win);
+            this.room.getOppositePlayer(this.#player).emit("endGame", !win);
         }
     }
 

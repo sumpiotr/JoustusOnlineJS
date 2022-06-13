@@ -118,6 +118,7 @@ socket.on("loginMessage", (message) => {
 });
 
 socket.on("endGame", (winner) => {
+    console.log(winner);
     board.deactivate();
     if (winner === 0) {
         hintManager.display("Draw!", hintTypes.normal);

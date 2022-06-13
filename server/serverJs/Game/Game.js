@@ -22,7 +22,7 @@ module.exports = class Game {
     #gemFields = [];
 
     constructor() {
-        this.firstPlayerTurn = this.#getRandomInt(0, 2) == 1;
+        this.firstPlayerTurn = true;
         this.gameStarted = false;
 
         this.#generateBoard();
@@ -97,7 +97,7 @@ module.exports = class Game {
         } while (nextField.card != null);
 
         for (let i = fields.length - 1; i >= 0; i--) {
-            fields[i].card = i == 0 ? card : fields[i - 1].card;
+            fields[i].card = i == 0 ? new Card(card, position, firstPlayer) : fields[i - 1].card;
         }
         return true;
     }
@@ -233,7 +233,7 @@ module.exports = class Game {
                 }
             }
         }
-
+        console.log(firstPlayerScore, secondPlayerScore);
         if (firstPlayerScore == secondPlayerScore) return 0;
         else if (firstPlayerScore > secondPlayerScore) return 1;
         else return -1;
