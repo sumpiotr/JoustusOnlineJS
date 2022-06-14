@@ -94,7 +94,7 @@ module.exports = class Client {
                 this.#player.emit("drawCard", newCard.id, this.getCardByName(newCard.card), true);
                 this.room.getOppositePlayer(this.#player).emit("drawCard", newCard.id, this.getCardByName(newCard.card), false);
 
-                let oppositeClient = this.room.getOppositeClient();
+                let oppositeClient = this.room.getOppositeClient(this);
                 oppositeClient.checkGameEnd();
             } else {
                 this.#player.emit("unselectCard");
@@ -185,6 +185,7 @@ module.exports = class Client {
     }
 
     checkGameEnd() {
+        console.log(this.firstPlayer, "check");
         let hand = [];
         for (let cardName of this.#deck.hand) {
             hand.push(this.getCardByName(cardName));
